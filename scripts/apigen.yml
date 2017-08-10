@@ -1,0 +1,11 @@
+accessLevels: [ public, protected, private ]
+annotationGroups: [ todo, deprecated ]
+destination: docs
+download: true
+exclude: []
+internal: true
+php: true
+extensions: [ php, html ]
+groups: namespaces
+source: [ common, console, backend, frontend, tests, vendor\yiisoft\yii2 ]
+templateConfig: .tools\ApiGen\bootstrap-theme\config.neon
