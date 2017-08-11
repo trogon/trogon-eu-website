@@ -36,14 +36,23 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
-            'showScriptName' => false,
+            'showScriptName' => true,
             'rules' => [
+				'<_lang:\w{2}(\-\w{2})?>/privacy-terms/<appKey:[\w\-]+>' => 'privacy-terms/index',
+				'privacy-terms/<appKey:[\w\-]+>' => 'privacy-terms/index',
+
+				'<_lang:\w{2}(\-\w{2})?>/<controller:[\w\-]+>/<action:[\w\-]+>/item-<id:\d+>' => '<controller>/<action>',
+				'<_lang:\w{2}(\-\w{2})?>/<controller:[\w\-]+>/<action:[\w\-]+>' => '<controller>/<action>',
+				'<_lang:\w{2}(\-\w{2})?>/<controller:[\w\-]+>/item-<id:\d+>' => '<controller>/index',
+				'<_lang:\w{2}(\-\w{2})?>/<controller:[\w\-]+>' => '<controller>/index',
+				'<controller:[\w\-]+>/<action:[\w\-]+>/item-<id:\d+>' => '<controller>/<action>',
+				'<controller:[\w\-]+>/<action:[\w\-]+>' => '<controller>/<action>',
+				'<controller:[\w\-]+>/item-<id:\d+>' => '<controller>/index',
+				'<controller:[\w\-]+>' => '<controller>/index',
             ],
         ],
-        */
     ],
     'params' => $params,
 ];
