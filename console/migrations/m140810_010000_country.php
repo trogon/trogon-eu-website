@@ -15,7 +15,7 @@ class m140810_010000_country extends Migration
 		$this->createTable('{{%country}}', [
 			'id' => $this->primaryKey(10)->unsigned(),
 			'code' => $this->string(2)->notNull(), // ISO 3166-1 alpha-2
-			'language' => $this->string(2)->notNull(), // ISO 639-1
+			'language' => $this->string(100)->notNull(), // ISO 639-1
 			'currency' => $this->string(3)->notNull(), // ISO 4217
 			'name' => $this->string(52)->notNull(), // English name
 			'currency_symbol' => $this->string(7),
