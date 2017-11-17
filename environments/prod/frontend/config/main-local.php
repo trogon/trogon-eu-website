@@ -9,5 +9,8 @@ return [
             'enableCsrfCookie' => false,
             'enableCookieValidation' => false,
         ],
+        'urlManager' => [
+            'showScriptName' => false,
+        ],
     ],
 ];
