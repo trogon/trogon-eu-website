@@ -38,6 +38,6 @@ class PrivacyTermsQuery extends \yii\db\ActiveQuery
      */
     public function appKey($appKey)
     {
-        return $this->andWhere(['appKey' => $appKey]);
+        return $this->andWhere(['app_key' => $appKey]);
     }
 }
