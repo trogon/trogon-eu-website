@@ -14,6 +14,7 @@ class m140810_010200_privacy_terms extends Migration
 
 		$this->createTable('{{%privacy_terms}}', [
 			'id' => $this->primaryKey(10)->unsigned(),
+			'app_key' => $this->string()->notNull(),
 			'name' => $this->string()->notNull(),
 			'content' => $this->text()->notNull(),
 
