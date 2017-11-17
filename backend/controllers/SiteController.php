@@ -4,8 +4,10 @@ namespace backend\controllers;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use common\models\Page;
 
 /**
  * Site controller
@@ -50,6 +52,10 @@ class SiteController extends Controller
             'error' => [
                 'class' => 'yii\web\ErrorAction',
             ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+            ],
         ];
     }
 
@@ -60,7 +66,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+		$model = $this->findModel('admin-home-page');
+
+        return $this->render('page',[
+			'model' => $model
+		]);
     }
 
     /**
@@ -95,4 +105,20 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+
+	/**
+	 * Finds the Page model based on its primary key value.
+	 * If the model is not found, a 404 HTTP exception will be thrown.
+	 * @param string $alias
+	 * @return Page the loaded model
+	 * @throws NotFoundHttpException if the model cannot be found
+	 */
+	protected function findModel($alias)
+	{
+		if (($model = Page::findOne(['alias' => $alias])) !== null) {
+			return $model;
+		} else {
+			throw new NotFoundHttpException('The requested page does not exist.');
+		}
+	}
 }
