@@ -3,16 +3,16 @@
 namespace backend\controllers;
 
 use Yii;
-use common\models\PrivacyTerms;
+use common\models\PrivacyPolicy;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * PrivacyTermsController implements the CRUD actions for PrivacyTerms model.
+ * PrivacyPolicyController implements the CRUD actions for PrivacyPolicy model.
  */
-class PrivacyTermsController extends Controller
+class PrivacyPolicyController extends Controller
 {
     /**
      * @inheritdoc
@@ -30,13 +30,13 @@ class PrivacyTermsController extends Controller
     }
 
     /**
-     * Lists all PrivacyTerms models.
+     * Lists all PrivacyPolicy models.
      * @return mixed
      */
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => PrivacyTerms::find(),
+            'query' => PrivacyPolicy::find(),
         ]);
 
         return $this->render('index', [
@@ -45,7 +45,7 @@ class PrivacyTermsController extends Controller
     }
 
     /**
-     * Displays a single PrivacyTerms model.
+     * Displays a single PrivacyPolicy model.
      * @param string $id
      * @return mixed
      */
@@ -57,13 +57,13 @@ class PrivacyTermsController extends Controller
     }
 
     /**
-     * Creates a new PrivacyTerms model.
+     * Creates a new PrivacyPolicy model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new PrivacyTerms();
+        $model = new PrivacyPolicy();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -75,7 +75,7 @@ class PrivacyTermsController extends Controller
     }
 
     /**
-     * Updates an existing PrivacyTerms model.
+     * Updates an existing PrivacyPolicy model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param string $id
      * @return mixed
@@ -94,7 +94,7 @@ class PrivacyTermsController extends Controller
     }
 
     /**
-     * Deletes an existing PrivacyTerms model.
+     * Deletes an existing PrivacyPolicy model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param string $id
      * @return mixed
@@ -107,15 +107,15 @@ class PrivacyTermsController extends Controller
     }
 
     /**
-     * Finds the PrivacyTerms model based on its primary key value.
+     * Finds the PrivacyPolicy model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param string $id
-     * @return PrivacyTerms the loaded model
+     * @return PrivacyPolicy the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = PrivacyTerms::findOne($id)) !== null) {
+        if (($model = PrivacyPolicy::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

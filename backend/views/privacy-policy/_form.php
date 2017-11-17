@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\PrivacyTerms */
+/* @var $model common\models\PrivacyPolicy */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="privacy-terms-form">
+<div class="privacy-policy-form">
 
     <?php $form = ActiveForm::begin(); ?>
 

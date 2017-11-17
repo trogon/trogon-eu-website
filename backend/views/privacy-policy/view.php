@@ -4,13 +4,13 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\PrivacyTerms */
+/* @var $model common\models\PrivacyPolicy */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Privacy Terms'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Privacy Policy'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="privacy-terms-view">
+<div class="privacy-policy-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 

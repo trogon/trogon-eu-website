@@ -6,7 +6,7 @@ use Yii;
 use yii\behaviors\TimestampBehavior;
 
 /**
- * This is the model class for table "{{%privacy_terms}}".
+ * This is the model class for table "{{%privacy_policy}}".
  *
  * @property string $id
  * @property string $app_key
@@ -15,14 +15,14 @@ use yii\behaviors\TimestampBehavior;
  * @property string $created_at
  * @property string $updated_at
  */
-class PrivacyTerms extends \yii\db\ActiveRecord
+class PrivacyPolicy extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return '{{%privacy_terms}}';
+        return '{{%privacy_policy}}';
     }
 
     /**
@@ -65,10 +65,10 @@ class PrivacyTerms extends \yii\db\ActiveRecord
 
     /**
      * @inheritdoc
-     * @return PrivacyTermsQuery the active query used by this AR class.
+     * @return PrivacyPolicyQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new PrivacyTermsQuery(get_called_class());
+        return new PrivacyPolicyQuery(get_called_class());
     }
 }

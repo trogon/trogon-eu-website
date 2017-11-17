@@ -40,8 +40,8 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => true,
             'rules' => [
-				'<_lang:\w{2}(\-\w{2})?>/privacy-terms/<appKey:[\w\-]+>' => 'privacy-terms/index',
-				'privacy-terms/<appKey:[\w\-]+>' => 'privacy-terms/index',
+				'<_lang:\w{2}(\-\w{2})?>/privacy-policy/<appKey:[\w\-]+>' => 'privacy-policy/index',
+				'privacy-policy/<appKey:[\w\-]+>' => 'privacy-policy/index',
 
 				'<_lang:\w{2}(\-\w{2})?>/<controller:[\w\-]+>/<action:[\w\-]+>/item-<id:\d+>' => '<controller>/<action>',
 				'<_lang:\w{2}(\-\w{2})?>/<controller:[\w\-]+>/<action:[\w\-]+>' => '<controller>/<action>',

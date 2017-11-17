@@ -3,11 +3,11 @@
 namespace common\models;
 
 /**
- * This is the ActiveQuery class for [[PrivacyTerms]].
+ * This is the ActiveQuery class for [[PrivacyPolicy]].
  *
- * @see PrivacyTerms
+ * @see PrivacyPolicy
  */
-class PrivacyTermsQuery extends \yii\db\ActiveQuery
+class PrivacyPolicyQuery extends \yii\db\ActiveQuery
 {
     /*public function active()
     {
@@ -16,7 +16,7 @@ class PrivacyTermsQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return PrivacyTerms[]|array
+     * @return PrivacyPolicy[]|array
      */
     public function all($db = null)
     {
@@ -25,7 +25,7 @@ class PrivacyTermsQuery extends \yii\db\ActiveQuery
 
     /**
      * @inheritdoc
-     * @return PrivacyTerms|array|null
+     * @return PrivacyPolicy|array|null
      */
     public function one($db = null)
     {
@@ -33,8 +33,8 @@ class PrivacyTermsQuery extends \yii\db\ActiveQuery
     }
 
     /**
-     * Filter only terms for given application key
-     * @return PrivacyTerms|array|null
+     * Filter only policy for given application key
+     * @return PrivacyPolicy|array|null
      */
     public function appKey($appKey)
     {
