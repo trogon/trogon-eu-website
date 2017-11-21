@@ -24,7 +24,7 @@ class m140810_010201_page extends Migration
 			'user_id' => $this->integer(10)->unsigned(),
 		], $tableOptions);
 		
-		$this->addForeignKey('FK_page_user', '{{%page}}', 'user_id', '{{%user}}', 'id');
+		$this->addForeignKey('{{%FK_page_user}}', '{{%page}}', 'user_id', '{{%user}}', 'id');
 	}
 
 	public function down()
