@@ -1,0 +1,27 @@
+{# templates/layout/navigation.html.twig #}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" href="#">
+            {% include "logo.html.twig" %}
+            <span>Trogon</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                {% for item in layout.mainMenu %}
+                {% set isActive = item.route == currentRoute %}
+                <li class="nav-item{% if isActive %} active{% endif %}">
+                    <a class="nav-link" href="{{ path(item.route) }}">
+                        {{ item.label }}
+                        {% if isActive %}<span class="sr-only">(current)</span>{% endif %}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</nav>
