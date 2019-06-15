@@ -1,0 +1,14 @@
+{# templates/main/home.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="jumbotron">
+    <h1 class="display-4">Trogon {% include "logo.html.twig" %}</h1>
+    <p class="lead">Welcome to Trogon official webpage. Here you can fild information about ongoing projects.</p>
+    <hr class="my-4">
+    <p>This website in currently under development. Please refer to the github page for more informations.</p>
+    <p class="lead">
+        <a class="btn btn-primary btn-lg" href="https://github.com/trogon" role="button">Github</a>
+    </p>
+</div>
+{% endblock %}
