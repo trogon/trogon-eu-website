@@ -1,35 +1,18 @@
-# yii console commands
-/yii
-/yii_test
-/yii_test.bat
 
-# phpstorm project files
-.idea
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
 
-# netbeans project files
-nbproject
-
-# zend studio for eclipse project files
-.buildpath
-.project
-.settings
-
-# windows thumbnail cache
-Thumbs.db
-
-# composer vendor dir
-/vendor
-
-# composer itself is not needed
-composer.phar
-
-# Mac DS_Store Files
-.DS_Store
-
-# phpunit itself is not needed
-phpunit.phar
-# local phpunit config
+###> symfony/phpunit-bridge ###
+.phpunit
 /phpunit.xml
+###< symfony/phpunit-bridge ###
 
-# vagrant runtime
-/.vagrant
+###> symfony/web-server-bundle ###
+/.web-server-pid
+###< symfony/web-server-bundle ###
