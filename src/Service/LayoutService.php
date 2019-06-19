@@ -14,5 +14,14 @@ class LayoutService
             'label' => 'Home',
             'route' => 'app_main_home'
         ];
+
+        $this->mainMenu[] = [
+            'label' => 'Home',
+            'route' => 'app_main_home'
+        ];
+        $this->mainMenu[] = [
+            'label' => 'Projects',
+            'route' => 'app_project_list'
+        ];
     }
 }
