@@ -6,6 +6,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 use App\Service\LayoutService;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\HttpClient\Exception\ClientException;
 
 class ProjectController extends AbstractController
 {
@@ -24,23 +25,27 @@ class ProjectController extends AbstractController
 
         $repos = [];
 
-        $bbRepos = $bitbucketApiClient->request('GET', '/2.0/repositories/trogon-studios');
-        foreach ($bbRepos->toArray()['values'] as $project) {
-            $name = $project['name'];
-            $repos[] = [
-                'name' => $name,
-                'url' => "https://www.bitbucket.com/trogon-studios/{$name}"
-            ];
-        }
+        try {
+            $bbRepos = $bitbucketApiClient->request('GET', '/2.0/repositories/trogon-studios');
+            foreach ($bbRepos->toArray()['values'] as $project) {
+                $repos[] = [
+                    'name' => $project['name'],
+                    'url' => "https://www.bitbucket.com/{$project['full_name']}",
+                    'description' => $project['description']
+                ];
+            }
+        } catch (ClientException $ex) { }
 
-        $ghRepos = $githubApiClient->request('GET', '/users/trogon/repos');
-        foreach ($ghRepos->toArray() as $project) {
-            $name = $project['name'];
-            $repos[] = [
-                'name' => $name,
-                'url' => "https://www.github.com/trogon/{$name}"
-            ];
-        }
+        try {
+            $ghRepos = $githubApiClient->request('GET', '/users/trogon/repos');
+            foreach ($ghRepos->toArray() as $project) {
+                $repos[] = [
+                    'name' => $project['name'],
+                    'url' => "https://www.github.com/{$project['full_name']}",
+                    'description' => $project['description']
+                ];
+            }
+        } catch (ClientException $ex) { }
 
         usort($repos, function ($a, $b) {
             return strcmp($a['name'], $b['name']);
