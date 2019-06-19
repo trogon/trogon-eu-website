@@ -6,11 +6,17 @@
     <h1 class="display-4">Project</h1>
     <p class="lead">List of currently ongoing projects.</p>
     <hr class="my-4">
-    <p>List of repository links for ongoing projects:</p>
-    <ul>
+    <div class="card">
         {% for item in repos %}
-            <li><a href="{{ item.url }}">{{ item.name }}</a></li>
+{% if not loop.first %}
+<hr>
+{% endif %}
+    <div class="card-body">
+        <h5 class="card-title">{{ item.name }}</h5>
+        <p class="card-text">{{ item.description }}</p>
+        <a href="{{ item.url }}" class="btn btn-primary">Go project page</a>
+    </div>
         {% endfor %}
-    </ul>
+    </div>
 </div>
 {% endblock %}
