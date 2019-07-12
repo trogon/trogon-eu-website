@@ -28,6 +28,24 @@
             "command": "composer install",
             "dependsOn": "Create DEV config",
             "problemMatcher": []
+        },
+        {
+            "label": "Create new entity",
+            "type": "shell",
+            "command": "php bin/console make:entity",
+            "problemMatcher": []
+        },
+        {
+            "label": "Create new migration",
+            "type": "shell",
+            "command": "php bin/console make:migration",
+            "problemMatcher": []
+        },
+        {
+            "label": "Update database",
+            "type": "shell",
+            "command": "php bin/console doctrine:migrations:migrate",
+            "problemMatcher": []
         }
     ]
 }
