@@ -7,14 +7,14 @@
     <p class="lead">List of currently ongoing projects.</p>
     <hr class="my-4">
     <div class="card">
-        {% for item in repos %}
+        {% for item in projects %}
 {% if not loop.first %}
 <hr>
 {% endif %}
     <div class="card-body">
         <h5 class="card-title">{{ item.name }}</h5>
         <p class="card-text">{{ item.description }}</p>
-        <a href="{{ item.url }}" class="btn btn-primary">Go project page</a>
+        <a href="{{ item.repoLink }}" class="btn btn-primary">Go project page</a>
     </div>
         {% endfor %}
     </div>
