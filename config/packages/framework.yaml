@@ -21,8 +21,14 @@ framework:
             bitbucket_api.client:
                 base_uri: https://api.bitbucket.org/
                 verify_peer: false
-                verify_host: false
+            bitbucket_oauth.client:
+                base_uri: https://bitbucket.org/site/oauth2/
+                auth_basic: 'mxnvmeayDbKeqcBcRM:a6FCepBfAtV6WDDCtvcsCDp4vmYAqdYj'
+                verify_peer: false
             github_api.client:
                 base_uri: https://api.github.com/
+                auth_basic: 'a6de26f9bd5efaa78116:713486ebf104bbb997a4cb9b861bf534b7f403ea'
                 verify_peer: false
-                verify_host: false
+            github_oauth.client:
+                base_uri: https://github.com/login/oauth/
+                verify_peer: false
