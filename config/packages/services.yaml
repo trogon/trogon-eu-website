@@ -1,0 +1,7 @@
+services:
+    table_prefix:
+        class: App\DoctrineExtensions\TablePrefix
+        arguments:
+            $prefix: 'tw1_'
+        tags:
+            - { name: doctrine.event_listener, event: loadClassMetadata }
