@@ -13,17 +13,20 @@
             "label": "Install PROD vendor",
             "type": "shell",
             "command": "composer install --no-dev --optimize-autoloader",
+            "dependsOn": "Create PROD config",
             "problemMatcher": []
         },
         {
-            "label": "Prepare PROD deploy",
+            "label": "Create DEV config",
             "type": "shell",
-            "command": "echo Preparing PROD deploy...",
-            "dependsOrder": "sequence",
-            "dependsOn": [
-                "Create PROD config",
-                "Install PROD vendor"
-            ],
+            "command": "composer dump-env dev",
+            "problemMatcher": []
+        },
+        {
+            "label": "Install DEV vendor",
+            "type": "shell",
+            "command": "composer install",
+            "dependsOn": "Create DEV config",
             "problemMatcher": []
         }
     ]
