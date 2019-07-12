@@ -1,0 +1,30 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558 
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Create PROD config",
+            "type": "shell",
+            "command": "composer dump-env prod",
+            "problemMatcher": []
+        },
+        {
+            "label": "Install PROD vendor",
+            "type": "shell",
+            "command": "composer install --no-dev --optimize-autoloader",
+            "problemMatcher": []
+        },
+        {
+            "label": "Prepare PROD deploy",
+            "type": "shell",
+            "command": "echo Preparing PROD deploy...",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Create PROD config",
+                "Install PROD vendor"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}
