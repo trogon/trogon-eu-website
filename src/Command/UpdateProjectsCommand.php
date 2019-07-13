@@ -88,19 +88,23 @@ class UpdateProjectsCommand extends Command
                     if (!array_key_exists($fullname, $projects)) {
                         $project = new Project();
                         $project->setProvider('bitbucket');
-                        $project->setName($projectData['name']);
                         $project->setFullName($fullname);
-                        $project->setDescription($projectData['description']);
-                        $project->setWebsite($projectData['website']);
-                        $project->setLanguage($projectData['language']);
-                        $project->setIsPrivate($projectData['is_private']);
-                        $project->setIsArchived(false);
                         $createdOn = \DateTime::createFromFormat($bitbucketDateFormat, $projectData['created_on']);
                         $project->setCreatedOn($createdOn);
-                        $updatedOn = \DateTime::createFromFormat($bitbucketDateFormat, $projectData['updated_on']);
-                        $project->setUpdatedOn($updatedOn);
                         $repoLink = "https://www.bitbucket.com/{$fullname}";
                         $project->setRepoLink($repoLink);
+                    } else {
+                        $project = $projects[$fullname];
+                    }
+                    $project->setName($projectData['name']);
+                    $project->setDescription($projectData['description']);
+                    $project->setWebsite($projectData['website']);
+                    $project->setLanguage($projectData['language']);
+                    $project->setIsPrivate($projectData['is_private']);
+                    $project->setIsArchived(false);
+                    $updatedOn = \DateTime::createFromFormat($bitbucketDateFormat, $projectData['updated_on']);
+                    $project->setUpdatedOn($updatedOn);
+                    if (!array_key_exists($fullname, $projects)) {
                         $entityManager->persist($project);
                     }
                 }
@@ -121,19 +125,23 @@ class UpdateProjectsCommand extends Command
                 if (!array_key_exists($fullname, $projects)) {
                     $project = new Project();
                     $project->setProvider('github');
-                    $project->setName($projectData['name']);
                     $project->setFullName($fullname);
-                    $project->setDescription($projectData['description']);
-                    $project->setWebsite($projectData['homepage']);
-                    $project->setLanguage($projectData['language']);
-                    $project->setIsPrivate($projectData['private']);
-                    $project->setIsArchived($projectData['archived']);
                     $createdOn = \DateTime::createFromFormat($ghDateFormat, $projectData['created_at']);
                     $project->setCreatedOn($createdOn);
-                    $updatedOn = \DateTime::createFromFormat($ghDateFormat, $projectData['updated_at']);
-                    $project->setUpdatedOn($updatedOn);
                     $repoLink = "https://www.github.com/{$fullname}";
                     $project->setRepoLink($repoLink);
+                } else {
+                    $project = $projects[$fullname];
+                }
+                $project->setName($projectData['name']);
+                $project->setDescription($projectData['description']);
+                $project->setWebsite($projectData['homepage']);
+                $project->setLanguage($projectData['language']);
+                $project->setIsPrivate($projectData['private']);
+                $project->setIsArchived($projectData['archived']);
+                $updatedOn = \DateTime::createFromFormat($ghDateFormat, $projectData['updated_at']);
+                $project->setUpdatedOn($updatedOn);
+                if (!array_key_exists($fullname, $projects)) {
                     $entityManager->persist($project);
                 }
             }
