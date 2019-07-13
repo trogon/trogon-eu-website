@@ -1,39 +1,75 @@
 <?php
-namespace App\Controller;
+namespace App\Command;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\Exception\TransportException;
 
+use Symfony\Bridge\Doctrine\RegistryInterface;
+
 use App\Entity\Project;
 
-/**
- * @Route("/cron", methods={"GET"})
- */
-class CronController extends AbstractController
+class UpdateProjectsCommand extends Command
 {
-    /**
-     * @Route("/update-projects", methods={"GET"})
-     */
-    public function updateProjects(
+    protected static $defaultName = 'app:cron:update-projects';
+
+    private $logger;
+    private $bitbucketApiClient;
+    private $githubApiClient;
+    private $bitbucketOauthClient;
+    private $githubOauthClient;
+    private $doctrine;
+
+    public function __construct(
         LoggerInterface $logger,
+        RegistryInterface $doctrine,
         HttpClientInterface $bitbucketApiClient,
         HttpClientInterface $githubApiClient,
         HttpClientInterface $bitbucketOauthClient,
         HttpClientInterface $githubOauthClient)
     {
-        $projects = $this->getDoctrine()
+        $this->logger = $logger;
+        $this->doctrine = $doctrine;
+        $this->bitbucketApiClient = $bitbucketApiClient;
+        $this->githubApiClient = $githubApiClient;
+        $this->bitbucketOauthClient = $bitbucketOauthClient;
+        $this->githubOauthClient = $githubOauthClient;
+
+
+        parent::__construct();
+    }
+
+    protected function configure()
+    {
+        $this
+            ->setDescription('Updates project data from third-party services.')
+            ->setHelp('This command updates project data stored in local database from third-party services eg. github, bitbucket etc.');
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $output->writeln([
+            'Projects Update',
+            '============',
+            '',
+        ]);
+
+        $output->writeln('Getting stored projects...');
+        $projects = $this->doctrine
             ->getRepository(Project::class)
             ->findAllIndexedByFullName();
         
-        $entityManager = $this->getDoctrine()
+        $entityManager = $this->doctrine
             ->getManager();
 
         try {
-            $response = $bitbucketOauthClient->request('POST', 'access_token', [
+            $output->writeln('Requesting authentication for bitbucket...');
+            $response = $this->bitbucketOauthClient->request('POST', 'access_token', [
                 'body' => ['grant_type' => 'client_credentials']
             ]);
 
@@ -42,7 +78,8 @@ class CronController extends AbstractController
             $bitbucketLink = '/2.0/repositories/trogon-studios?pagelen=25&fields=-*.links,-*.owner,-*.project,-*.mainbranch';
             $bitbucketDateFormat = 'Y-m-d\TH:i:s.uP';
             while (!empty($bitbucketLink)) {
-                $bbRepos = $bitbucketApiClient->request('GET', $bitbucketLink, [
+                $output->writeln('Getting projects from bitbucket...');
+                $bbRepos = $this->bitbucketApiClient->request('GET', $bitbucketLink, [
                     'auth_bearer' => $authResponse['access_token']
                 ]);
                 $responseArray = $bbRepos->toArray();
@@ -68,14 +105,16 @@ class CronController extends AbstractController
                     }
                 }
                 $bitbucketLink = isset($responseArray['next']) ? $responseArray['next'] : null;
+                $output->writeln('Saving changed projects from bitbucket...');
                 $entityManager->flush();
             }
-        } catch (ClientException $ex) { $logger->warning($ex); }
-        catch (TransportException $ex) { $logger->warning($ex); }
+        } catch (ClientException $ex) { $this->logger->warning($ex); }
+        catch (TransportException $ex) { $this->logger->warning($ex); }
         
         try {
             $githubLink = '/users/trogon/repos';
-            $ghRepos = $githubApiClient->request('GET', $githubLink);
+            $output->writeln('Getting projects from github...');
+            $ghRepos = $this->githubApiClient->request('GET', $githubLink);
             $ghDateFormat = 'Y-m-d\TH:i:s\Z';
             foreach ($ghRepos->toArray() as $projectData) {
                 $fullname = $projectData['full_name'];
@@ -98,12 +137,11 @@ class CronController extends AbstractController
                     $entityManager->persist($project);
                 }
             }
-        } catch (ClientException $ex) { $logger->warning($ex); }
-        catch (TransportException $ex) { $logger->warning($ex); }
-        $entityManager->flush();
+            $output->writeln('Saving changed projects from github...');
+            $entityManager->flush();
+        } catch (ClientException $ex) { $this->logger->warning($ex); }
+        catch (TransportException $ex) { $this->logger->warning($ex); }
 
-        return $this->render('cron/update_projects.html.twig', [
-            'projects' => $projects
-        ]);
+        $output->writeln('Process finished.');
     }
 }
