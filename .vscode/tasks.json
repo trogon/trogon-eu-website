@@ -1,0 +1,51 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558 
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Create PROD config",
+            "type": "shell",
+            "command": "composer dump-env prod",
+            "problemMatcher": []
+        },
+        {
+            "label": "Install PROD vendor",
+            "type": "shell",
+            "command": "composer install --no-dev --optimize-autoloader",
+            "dependsOn": "Create PROD config",
+            "problemMatcher": []
+        },
+        {
+            "label": "Create DEV config",
+            "type": "shell",
+            "command": "composer dump-env dev",
+            "problemMatcher": []
+        },
+        {
+            "label": "Install DEV vendor",
+            "type": "shell",
+            "command": "composer install",
+            "dependsOn": "Create DEV config",
+            "problemMatcher": []
+        },
+        {
+            "label": "Create new entity",
+            "type": "shell",
+            "command": "php bin/console make:entity",
+            "problemMatcher": []
+        },
+        {
+            "label": "Create new migration",
+            "type": "shell",
+            "command": "php bin/console make:migration",
+            "problemMatcher": []
+        },
+        {
+            "label": "Update database",
+            "type": "shell",
+            "command": "php bin/console doctrine:migrations:migrate",
+            "problemMatcher": []
+        }
+    ]
+}
