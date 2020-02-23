@@ -29,6 +29,7 @@ class UpdateProjectNewsCommand extends Command
     private $bitbucketClient;
     private $githubClient;
     private $doctrine;
+    private $twig;
 
     public function __construct(
         LoggerInterface $logger,
@@ -56,7 +57,7 @@ class UpdateProjectNewsCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $output->writeln([
-            'Project ~Ara sketch~ News Update',
+            'Project News Update',
             '============',
             '',
         ]);
@@ -84,7 +85,8 @@ class UpdateProjectNewsCommand extends Command
         $response_contexts = [];
 
         foreach ($projects as $project_fullname => $project) {
-            if ($project->getProvider() != 'bitbucket') continue;
+            if ($project->getProvider() !== 'bitbucket') continue;
+            if ($project->getIsPrivate() == true) continue;
             $response = $this->bitbucketClient->getTagsResponse($auth_token, $project_fullname);
             $url = $response->getInfo('url');
             $response_contexts[$url] = $project;
@@ -114,12 +116,12 @@ class UpdateProjectNewsCommand extends Command
                         $tagref = "$projectref;tag:" . $tagData['name'];
 
                         if (!array_key_exists($tagref, $news_list)) {
-                            $news = $this->createNews($output, $tagref, $tagData);
+                            $news = $this->createNews($output, $project, $tagref, $tagData);
                         } else {
                             $news = $news_list[$tagref];
                         }
         
-                        $this->updateNewsContent($output, $tagref, $news, $project, $tagData);
+                        $this->updateNewsContent($output, $news, $project, $tagData);
         
                         if (!array_key_exists($tagref, $news_list)) {
                             $entityManager->persist($news);
@@ -163,12 +165,13 @@ class UpdateProjectNewsCommand extends Command
         return null;
     }
 
-    private function createNews($output, $tagref, $tagData)
+    private function createNews($output, $project, $tagref, $tagData)
     {
-        $output->writeln("New project news $tagref...");
+        $output->writeln("New project news {$tagref}...");
 
         $news = new News();
         $news->setReference($tagref);
+        $news->setProject($project);
         $createdOn = \DateTime::createFromFormat(self::$bitbucketDateFormat, $tagData['date']);
         if ($createdOn !== false) {
             $news->setCreatedOn($createdOn);
@@ -184,9 +187,9 @@ class UpdateProjectNewsCommand extends Command
         return $news;
     }
 
-    private function updateNewsContent($output, $tagref, $news, $project, $tagData)
+    private function updateNewsContent($output, $news, $project, $tagData)
     {
-        $output->writeln("Update project news $tagref...");
+        $output->writeln("Update project news {$news->getReference()}...");
 
         $summary = $this->twig->render('news/templates/new-release-summary.html.twig', [
             'project_name' => $project->getName(),

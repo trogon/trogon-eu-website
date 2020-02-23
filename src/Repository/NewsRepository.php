@@ -30,6 +30,18 @@ class NewsRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @return News[] Returns an array of News objects, use ordered by time
+     */
+    public function findAllOrderedByCreatedOn()
+    {
+        return $this->createQueryBuilder('n')
+            ->orderBy('n.created_on', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return News[] Returns an array of News objects
     //  */

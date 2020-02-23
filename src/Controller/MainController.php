@@ -15,7 +15,7 @@ class MainController extends AbstractController
     {
         $news = $this->getDoctrine()
             ->getRepository(News::class)
-            ->findAll(10);
+            ->findAllOrderedByCreatedOn();
 
         return $this->render('main/home.html.twig', [
             'news' => $news,
