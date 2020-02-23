@@ -19,6 +19,17 @@ class NewsRepository extends ServiceEntityRepository
         parent::__construct($registry, News::class);
     }
 
+    /**
+     * @return News[] Returns an array of News objects, use reference as result array key
+     */
+    public function findAllIndexedByReference()
+    {
+        return $this->createQueryBuilder('n', 'n.reference')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     // /**
     //  * @return News[] Returns an array of News objects
     //  */
