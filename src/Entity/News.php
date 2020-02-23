@@ -37,6 +37,11 @@ class News
     private $project;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $reference;
+
+    /**
      * @ORM\Column(type="datetimetz")
      */
     private $created_on;
@@ -95,6 +100,18 @@ class News
     public function setProject(?Project $project): self
     {
         $this->project = $project;
+
+        return $this;
+    }
+
+    public function getReference(): ?string
+    {
+        return $this->reference;
+    }
+
+    public function setReference(string $reference): self
+    {
+        $this->reference = $reference;
 
         return $this;
     }
