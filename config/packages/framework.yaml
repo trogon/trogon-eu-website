@@ -19,6 +19,7 @@ framework:
     http_client:
         scoped_clients:
             bitbucket_api.client:
+                http_version: 1.1
                 base_uri: https://api.bitbucket.org/
                 verify_peer: false
             bitbucket_oauth.client:

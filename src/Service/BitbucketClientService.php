@@ -8,7 +8,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class BitbucketClientService
 {
     private $logger;
-    private $bitbucketApiClient;
+    public $bitbucketApiClient;
     private $bitbucketOauthClient;
 
     public function __construct(
@@ -28,9 +28,12 @@ class BitbucketClientService
         ]);
     }
 
-    public function getRepositoriesResponse($auth_token)
+    public function getRepositoriesResponse($auth_token, $next_link=null)
     {
-        $bitbucketLink = '/2.0/repositories/trogon-studios?pagelen=25&fields=-*.links,-*.owner,-*.project,-*.mainbranch';
+        $bitbucketLink = '/2.0/repositories/trogon-studios?pagelen=10&fields=-*.links,-*.owner,-*.project,-*.mainbranch';
+        if (!empty($next_link)) {
+            $bitbucketLink = $next_link;
+        }
         return $this->bitbucketApiClient->request('GET', $bitbucketLink, [
             'auth_bearer' => $auth_token
         ]);
