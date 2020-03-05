@@ -15,7 +15,7 @@
             {{ item.title }}
         </div>
         <div class="card-body">
-            <p class="card-text">{{ item.summary }}</p>
+            <p class="card-text">{{ item.summary | raw }}</p>
             <div class="d-flex justify-content-between align-items-center">
                 {# <div class="btn-group">
                     <button class="btn btn-sm btn-outline-secondary" type="button">Read more »</button>
