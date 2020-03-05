@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -75,6 +77,16 @@ class Project
      * @ORM\Column(type="datetimetz")
      */
     private $updated_on;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\News", mappedBy="project")
+     */
+    private $news;
+
+    public function __construct()
+    {
+        $this->news = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -221,6 +233,37 @@ class Project
     public function setUpdatedOn(\DateTimeInterface $updated_on): self
     {
         $this->updated_on = $updated_on;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|News[]
+     */
+    public function getNews(): Collection
+    {
+        return $this->news;
+    }
+
+    public function addNews(News $news): self
+    {
+        if (!$this->news->contains($news)) {
+            $this->news[] = $news;
+            $news->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNews(News $news): self
+    {
+        if ($this->news->contains($news)) {
+            $this->news->removeElement($news);
+            // set the owning side to null (unless already changed)
+            if ($news->getProject() === $this) {
+                $news->setProject(null);
+            }
+        }
 
         return $this;
     }
