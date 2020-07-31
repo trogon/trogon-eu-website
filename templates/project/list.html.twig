@@ -6,6 +6,7 @@
     <h1 class="display-4">Project</h1>
     <p class="lead">List of currently ongoing projects.</p>
     <hr class="my-4">
+    <!-- project items block -->
     <div class="card">
         {% for item in projects %}
 {% if not loop.first %}
@@ -14,7 +15,7 @@
     <div class="card-body">
         <h5 class="card-title">{{ item.name }}</h5>
         <p class="card-text">{{ item.description }}</p>
-        <a href="{{ item.repoLink }}" class="btn btn-primary">Go project page</a>
+        <a href="{{ url('app_project_show', {'name': item.fullName|url_encode }) }}" class="btn btn-primary">Project page</a>
     </div>
         {% endfor %}
     </div>
