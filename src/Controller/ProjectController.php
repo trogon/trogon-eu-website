@@ -37,4 +37,43 @@ class ProjectController extends AbstractController
             'projects' => $projects,
         ]);
     }
+
+    /**
+     * @Route("/project/{name}", methods={"GET"})
+     */
+    public function show(
+        $name,
+        LayoutService $layout)
+    {
+        $full_name = urldecode($name);
+
+        $showPrivate = false;
+        $projects = $this->getDoctrine()
+            ->getRepository(Project::class)
+            ->findBy(['is_private' => $showPrivate, 'full_name' => $full_name]);
+
+        usort($projects, function ($a, $b) {
+            return strcasecmp($a->getName(), $b->getName());
+        });
+
+        if (count($projects) > 0) {
+            $project = $projects[0];
+
+            $layout->breadcrumbs[] = [
+                'label' => 'Projects',
+                'route' => 'app_project_list'
+            ];
+            $layout->breadcrumbs[] = [
+                'label' => $project->getName(),
+                'route' => 'app_project_show'
+            ];
+
+            return $this->render('project/show.html.twig', [
+                'name' => urldecode($name),
+                'project' => $project,
+            ]);
+        } else {
+            throw $this->createNotFoundException('The project does not exist');
+        }
+    }
 }
