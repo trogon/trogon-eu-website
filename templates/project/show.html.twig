@@ -4,6 +4,22 @@
 {% block body %}
 <div class="jumbotron">
     <h1 class="display-4">Project {{ project.name }}</h1>
+    <p class="lead">
+{% if project.provider == 'bitbucket' %}
+        <img alt="Bitbucket pull requests" 
+            src="{{ badge(project.provider, 'pr', project.fullName, {style:'for-the-badge'}) }}"/>
+{% endif %}
+{% if project.provider == 'github' %}
+        <img alt="GitHub pull requests" 
+            src="{{ badge(project.provider, 'issues-pr', project.fullName, {style:'for-the-badge'}) }}"/>
+        <img alt="GitHub license" 
+            src="{{ badge(project.provider, 'license', project.fullName, {style:'for-the-badge'}) }}"/>
+        <img alt="GitHub latest version"
+            src="{{ badge(project.provider, 'v/tag', project.fullName, {style:'for-the-badge', label:'Release'}) }}"/>
+        <img alt="GitHub downloads"
+            src="{{ badge(project.provider, 'downloads', project.fullName, {style:'for-the-badge'}, 'total') }}"/>
+{% endif %}
+    </p>
     <hr class="my-4">
     <!-- description block -->
     <div class="card">
