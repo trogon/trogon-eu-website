@@ -9,13 +9,8 @@
         {% endblock %}
     </head>
     <body>
-        {{ render(controller(
-            'App\\Controller\\LayoutController::navigation',
-            { 'name': 'main' }
-        )) }}
-        {{ render(controller(
-            'App\\Controller\\LayoutController::breadcrumb'
-        )) }}
+        {{ navigation('main') }}
+        {{ breadcrumb() }}
         <div class="container">
             {% block body %}{% endblock %}
             <footer class="footer">

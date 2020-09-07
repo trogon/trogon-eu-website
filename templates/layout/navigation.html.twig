@@ -1,5 +1,7 @@
 {# templates/layout/navigation.html.twig #}
 
+{% set currentRoute = app.request.attributes.get('_route') %}
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
         <a class="navbar-brand" href="#">
