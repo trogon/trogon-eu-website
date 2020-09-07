@@ -30,3 +30,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\DoctrineExtensions\TablePrefix:
+        class: App\DoctrineExtensions\TablePrefix
+        arguments:
+            $prefix: 'tw1_'
+        tags:
+            - { name: doctrine.event_listener, event: loadClassMetadata }
