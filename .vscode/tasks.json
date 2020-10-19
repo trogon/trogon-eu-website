@@ -52,6 +52,12 @@
             "type": "shell",
             "command": "yarn run encore dev --watch",
             "problemMatcher": []
+        },
+        {
+            "label": "Build scripts and styles (Prod)",
+            "type": "shell",
+            "command": "yarn run encore production",
+            "problemMatcher": []
         }
     ]
 }

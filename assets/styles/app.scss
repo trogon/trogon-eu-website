@@ -1,12 +1,11 @@
-$background-color: lightgray;
-$footer-color: #e9ecef;
+// assets/styles/app.scss
 
-body {
-    background-color: $background-color;
-}
+@import "global";
+
+$app_footer_color: #e9ecef;
 
 .footer {
-    background-color: $footer-color;
+    background-color: $app_footer_color;
     border-radius: 0.25rem;
     overflow: auto;
     padding: 0.75rem 1rem;
