@@ -46,6 +46,12 @@
             "type": "shell",
             "command": "php bin/console doctrine:migrations:migrate",
             "problemMatcher": []
+        },
+        {
+            "label": "Build scripts and styles",
+            "type": "shell",
+            "command": "yarn run encore dev --watch",
+            "problemMatcher": []
         }
     ]
 }

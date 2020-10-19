@@ -1,0 +1,13 @@
+$background-color: lightgray;
+$footer-color: #e9ecef;
+
+body {
+    background-color: $background-color;
+}
+
+.footer {
+    background-color: $footer-color;
+    border-radius: 0.25rem;
+    overflow: auto;
+    padding: 0.75rem 1rem;
+}
