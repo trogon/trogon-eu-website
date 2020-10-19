@@ -2,9 +2,21 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ApiResource(
+ *     iri="http://trogon.eu/News",
+ *     collectionOperations={
+ *         "get",
+ *     },
+ *     itemOperations={
+ *         "get",
+ *     },
+ *     order={"created_on"="DESC"},
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\NewsRepository")
  */
 class News
