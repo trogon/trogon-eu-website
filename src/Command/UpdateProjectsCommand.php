@@ -71,7 +71,7 @@ class UpdateProjectsCommand extends Command
         $output->writeln('Process finished.');
     }
 
-    private function getAuthToken($output)
+    private function getBitbucketAuthToken($output)
     {
         $output->writeln('Requesting authentication for bitbucket...');
         $response = $this->bitbucketClient->getAccessTokenResponse();
@@ -92,14 +92,14 @@ class UpdateProjectsCommand extends Command
 
     private function updateBitbucketProjects(OutputInterface $output, $entityManager, $projects)
     {
-        $auth_token = $this->getAuthToken($output);
+        $auth_token = $this->getBitbucketAuthToken($output);
         if ($auth_token == null)
         {
             return false;
         }
 
         $next_responses = [];
-        $next_responses[] = $this->bitbucketClient->getRepositoriesResponse($auth_token);
+        $next_responses[] = $this->bitbucketClient->getRepositoriesResponse('trogon-studios', $auth_token);
 
         $output->writeln('Getting projects from bitbucket...');
         while (!empty($next_responses)) {
@@ -137,7 +137,7 @@ class UpdateProjectsCommand extends Command
                         if (isset($responseArray['next'])) {
                             $output->writeln('Next page - getting projects from bitbucket...');
                             $next_responses[] = $this->bitbucketClient->getRepositoriesResponse(
-                                $auth_token, $responseArray['next']);
+                                'trogon-studios', $auth_token, $responseArray['next']);
                         }
                     } else {
                         // $chunk->getContent() will return a piece
@@ -191,7 +191,7 @@ class UpdateProjectsCommand extends Command
     private function updateGithubProjects(OutputInterface $output, $entityManager, $projects)
     {
         $responses = [];
-        $responses[] = $this->githubClient->getRepositoriesResponse();
+        $responses[] = $this->githubClient->getRepositoriesResponse('trogon');
 
         $output->writeln('Getting projects from github...');
         foreach ($this->githubClient->stream($responses) as $response => $chunk) {

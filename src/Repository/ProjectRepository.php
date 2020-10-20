@@ -30,6 +30,19 @@ class ProjectRepository extends ServiceEntityRepository
         ;
     }
 
+    /**
+     * @return Project[] Returns an array of Project objects, use full_name as result array key
+     */
+    public function findByProviderIndexedByFullName($provider)
+    {
+        return $this->createQueryBuilder('p', 'p.full_name')
+            ->andWhere('p.provider = :provider')
+            ->setParameter('provider', $provider)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     /*
     public function findOneBySomeField($value): ?Project
     {

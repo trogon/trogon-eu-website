@@ -28,6 +28,7 @@ framework:
                 verify_peer: false
             github_api.client:
                 base_uri: https://api.github.com/
+                # this mean if authentication will be removed in 2021
                 auth_basic: 'a6de26f9bd5efaa78116:713486ebf104bbb997a4cb9b861bf534b7f403ea'
                 verify_peer: false
             github_oauth.client:
