@@ -8,8 +8,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class GithubClientService
 {
     private $logger;
-    private $githubApiClient;
-    private $githubOauthClient;
+    private $apiClient;
+    private $oauthClient;
 
     public function __construct(
         LoggerInterface $logger,
@@ -17,18 +17,24 @@ class GithubClientService
         HttpClientInterface $githubOauthClient)
     {
         $this->logger = $logger;
-        $this->githubApiClient = $githubApiClient;
-        $this->githubOauthClient = $githubOauthClient;
+        $this->apiClient = $githubApiClient;
+        $this->oauthClient = $githubOauthClient;
     }
 
-    public function getRepositoriesResponse()
+    public function getRepositoriesResponse($user)
     {
-        $githubLink = '/users/trogon/repos';
-        return $this->githubApiClient->request('GET', $githubLink);
+        $reposLink = "/users/{$user}/repos";
+        return $this->apiClient->request('GET', $reposLink);
+    }
+
+    public function getTagsResponse($project_fullname)
+    {
+        $tagsLink = "/repos/{$project_fullname}/tags";
+        return $this->apiClient->request('GET', $tagsLink);
     }
 
     public function stream($responses)
     {
-        return $this->githubApiClient->stream($responses);
+        return $this->apiClient->stream($responses);
     }
 }

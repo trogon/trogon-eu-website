@@ -8,8 +8,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 class BitbucketClientService
 {
     private $logger;
-    private $bitbucketApiClient;
-    private $bitbucketOauthClient;
+    public $apiClient;
+    private $oauthClient;
 
     public function __construct(
         LoggerInterface $logger,
@@ -17,35 +17,41 @@ class BitbucketClientService
         HttpClientInterface $bitbucketOauthClient)
     {
         $this->logger = $logger;
-        $this->bitbucketApiClient = $bitbucketApiClient;
-        $this->bitbucketOauthClient = $bitbucketOauthClient;
+        $this->apiClient = $bitbucketApiClient;
+        $this->oauthClient = $bitbucketOauthClient;
     }
 
     public function getAccessTokenResponse()
     {
-        return $this->bitbucketOauthClient->request('POST', 'access_token', [
+        return $this->oauthClient->request('POST', 'access_token', [
             'body' => ['grant_type' => 'client_credentials']
         ]);
     }
 
-    public function getRepositoriesResponse($auth_token)
+    public function getRepositoriesResponse($user, $auth_token, $next_link=null)
     {
-        $bitbucketLink = '/2.0/repositories/trogon-studios?pagelen=25&fields=-*.links,-*.owner,-*.project,-*.mainbranch';
-        return $this->bitbucketApiClient->request('GET', $bitbucketLink, [
+        $reposLink = "/2.0/repositories/{$user}?pagelen=10&fields=-*.links,-*.owner,-*.project,-*.mainbranch";
+        if (!empty($next_link)) {
+            $reposLink = $next_link;
+        }
+        return $this->apiClient->request('GET', $reposLink, [
             'auth_bearer' => $auth_token
         ]);
     }
 
-    public function getTagsResponse($auth_token, $project_fullname)
+    public function getTagsResponse($project_fullname, $auth_token, $next_link=null)
     {
-        $bitbucketLink = "/2.0/repositories/{$project_fullname}/refs/tags";
-        return $this->bitbucketApiClient->request('GET', $bitbucketLink, [
+        $tagsLink = "/2.0/repositories/{$project_fullname}/refs/tags";
+        if (!empty($next_link)) {
+            $tagsLink = $next_link;
+        }
+        return $this->apiClient->request('GET', $tagsLink, [
             'auth_bearer' => $auth_token
         ]);
     }
 
     public function stream($responses)
     {
-        return $this->bitbucketApiClient->stream($responses);
+        return $this->apiClient->stream($responses);
     }
 }
