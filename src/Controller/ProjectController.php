@@ -13,6 +13,8 @@ use App\Entity\Project;
 
 class ProjectController extends AbstractController
 {
+    private $showPrivate = false;
+
     /**
      * @Route("/projects", methods={"GET"})
      */
@@ -24,10 +26,9 @@ class ProjectController extends AbstractController
             'route' => 'app_project_list'
         ];
 
-        $showPrivate = false;
         $projects = $this->getDoctrine()
             ->getRepository(Project::class)
-            ->findBy(['is_private' => $showPrivate]);
+            ->findBy(['is_private' => $this->showPrivate]);
 
         usort($projects, function ($a, $b) {
             return strcasecmp($a->getName(), $b->getName());
@@ -47,10 +48,9 @@ class ProjectController extends AbstractController
     {
         $full_name = urldecode($name);
 
-        $showPrivate = false;
         $projects = $this->getDoctrine()
             ->getRepository(Project::class)
-            ->findBy(['is_private' => $showPrivate, 'full_name' => $full_name]);
+            ->findBy(['is_private' => $this->showPrivate, 'full_name' => $full_name]);
 
         usort($projects, function ($a, $b) {
             return strcasecmp($a->getName(), $b->getName());
