@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\Exception\TransportException;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Persistence\ManagerRegistry;
 
 use App\Entity\Project;
 
@@ -29,7 +29,7 @@ class UpdateProjectsCommand extends Command
 
     public function __construct(
         LoggerInterface $logger,
-        RegistryInterface $doctrine,
+        ManagerRegistry $doctrine,
         BitbucketClientService $bitbucketClient,
         GithubClientService $githubClient)
     {

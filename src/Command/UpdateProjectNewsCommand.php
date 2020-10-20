@@ -9,7 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\Exception\TransportException;
 
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Persistence\ManagerRegistry;
 
 use Twig\Environment;
 
@@ -33,7 +33,7 @@ class UpdateProjectNewsCommand extends Command
 
     public function __construct(
         LoggerInterface $logger,
-        RegistryInterface $doctrine,
+        ManagerRegistry $doctrine,
         Environment $twig,
         BitbucketClientService $bitbucketClient,
         GithubClientService $githubClient)
