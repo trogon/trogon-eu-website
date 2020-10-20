@@ -19,8 +19,26 @@
         <div class="container">
             {% block body %}{% endblock %}
             <footer class="footer">
-                <span class="float-left">&copy; Trogon 2017 - {{ date() | date("Y") }}</span>
-                <span class="float-right">Version: 2.5.2008</span>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-7 col-sm text-left">
+                            &copy; Trogon 2017 - {{ date() | date("Y") }}
+                        </div>
+                        <div class="d-none d-sm-none d-md-block col-md col-lg-7 col-xl-7 text-center">
+                            <small class="text-muted">
+                                Powered by
+                                <a href="https://api-platform.com/" target="_blank">API Platform</a>,
+                                <a href="https://getbootstrap.com/" target="_blank">Bootstrap</a>,
+                                <a href="https://doctrine-project.org/" target="_blank">Doctrine</a>,
+                                <a href="https://reactjs.org/" target="_blank">React</a>,
+                                <a href="https://symfony.com/" target="_blank">Symfony</a>
+                            </small>
+                        </div>
+                        <div class="col-5 col-sm text-right">
+                            Version: 2.6.2010
+                        </div>
+                    </div>
+                </div>
             </footer>
         </div>
         {% block javascripts %}
