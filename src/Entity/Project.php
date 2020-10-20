@@ -2,11 +2,24 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Annotation\ApiSubresource;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @ApiResource(
+ *     iri="http://trogon.eu/Project",
+ *     collectionOperations={
+ *         "get",
+ *     },
+ *     itemOperations={
+ *         "get",
+ *     },
+ *     order={"name"="ASC"},
+ * )
  * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
  */
 class Project
@@ -79,6 +92,7 @@ class Project
     private $updated_on;
 
     /**
+     * @ApiSubresource
      * @ORM\OneToMany(targetEntity="App\Entity\News", mappedBy="project")
      */
     private $news;
