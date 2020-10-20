@@ -4,20 +4,30 @@
 {% block body %}
 <div class="jumbotron">
     <h1 class="display-4">Project</h1>
-    <p class="lead">List of currently ongoing projects.</p>
+    <p class="lead">List of currently ongoing projects. <span id="show_hide_archived_container" class="float-right"></span></p>
     <hr class="my-4">
     <!-- project items block -->
     <div class="card">
         {% for item in projects %}
-{% if not loop.first %}
-<hr>
-{% endif %}
-    <div class="card-body">
-        <h5 class="card-title">{{ item.name }}</h5>
-        <p class="card-text">{{ item.description }}</p>
-        <a href="{{ url('app_project_show', {'name': item.fullName|url_encode }) }}" class="btn btn-primary">Project page</a>
-    </div>
+        <div class="card-body project{% if item.isArchived %} archived{% endif %}" data-id="{{ item.id }}">
+            <h5 class="card-title">{{ item.name }} {% if item.isArchived %}<span class="badge badge-info">Archived</span>{% endif %}</h5>
+            <p class="card-text">{{ item.description }}</p>
+            <a href="{{ url('app_project_show', {'name': item.fullName|url_encode }) }}" class="btn btn-primary">Project page</a>
+        </div>
+            {% if not loop.last %}
+        <hr{% if item.isArchived %} class="project archived"{% endif %}>
+            {% endif %}
         {% endfor %}
     </div>
 </div>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+{{ encore_entry_link_tags('project') }}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+{{ encore_entry_script_tags('project') }}
 {% endblock %}
