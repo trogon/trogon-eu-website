@@ -1,9 +1,8 @@
-// assets/project.js
+// assets/project.tsx
+
+import './styles/project.scss';
 
 import jQuery from 'jquery';
-
-// any CSS you import will output into a single css file (app.css in this case)
-import './styles/project.scss';
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
