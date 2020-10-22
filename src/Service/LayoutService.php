@@ -27,19 +27,19 @@ class LayoutService
 
         $this->socialLinks[] = [
             'label' => 'Linkedin',
-            'icon' => 'linkedin',
+            'icon' => 'fab fa-linkedin',
             'iconStyle' => 'color:rgb(0, 115, 177)',
             'route' => 'https://www.linkedin.com/in/mklemarczyk/'
         ];
         $this->socialLinks[] = [
             'label' => 'Bitbucket',
-            'icon' => 'bitbucket',
+            'icon' => 'fab fa-bitbucket',
             'iconStyle' => 'color:rgb(38, 132, 255)',
             'route' => 'https://www.bitbucket.org/trogon-studios/'
         ];
         $this->socialLinks[] = [
             'label' => 'GitHub',
-            'icon' => 'github',
+            'icon' => 'fab fa-github',
             'route' => 'https://www.github.com/trogon/'
         ];
         $this->socialLinks[] = [
@@ -47,14 +47,20 @@ class LayoutService
             'route' => 'https://www.hackster.io/trogon/'
         ];
         $this->socialLinks[] = [
+            'label' => 'Adobe Portfolio',
+            'icon' => 'fas fa-photo-video',
+            'iconStyle' => 'color:rgb(190, 75, 219)',
+            'route' => 'https://art.trogon.eu/'
+        ];
+        $this->socialLinks[] = [
             'label' => 'Twitter',
-            'icon' => 'twitter',
+            'icon' => 'fab fa-twitter',
             'iconStyle' => 'color:rgb(29, 161, 242)',
             'route' => 'https://www.twitter.com/maciekpak/'
         ];
         $this->socialLinks[] = [
             'label' => 'Youtube channel',
-            'icon' => 'youtube',
+            'icon' => 'fab fa-youtube',
             'iconStyle' => 'color:rgb(255, 0, 0)',
             'route' => 'https://www.youtube.com/channel/UCcnwMFLxso4AGmHSU_ftnqQ/'
         ];
