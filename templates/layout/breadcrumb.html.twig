@@ -2,15 +2,15 @@
 
 {% set lastItem = layout.breadcrumbs | last %}
 <div class="container">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
+	<nav aria-label="breadcrumb">
+		<ol class="breadcrumb">
 {% for item in layout.breadcrumbs %}
-    {%~ if item == lastItem %}
-            <li class="breadcrumb-item active" aria-current="page">{{ item.label }}</li>
-    {%~ else %}
-            <li class="breadcrumb-item"><a href="{{ path(item.route) }}">{{ item.label }}</a></li>
-    {%~ endif %}
+	{%~ if item == lastItem %}
+			<li class="breadcrumb-item active" aria-current="page">{{ item.label }}</li>
+	{%~ else %}
+			<li class="breadcrumb-item"><a href="{{ path(item.route) }}">{{ item.label }}</a></li>
+	{%~ endif %}
 {% endfor %}
-        </ol>
-    </nav>
+		</ol>
+	</nav>
 </div>
