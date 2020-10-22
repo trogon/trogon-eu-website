@@ -1,16 +1,14 @@
 <?php
 namespace App\TwigExtensions;
 
-use Twig\Extension\AbstractExtension;
-use Twig\TwigFunction;
+use Twig\Extension\RuntimeExtensionInterface;
 
-class RepositoryBadgesExtension extends AbstractExtension
+class RepositoryBadgesRuntime implements RuntimeExtensionInterface
 {
-    public function getFunctions()
+    public function __construct()
     {
-        return [
-            new TwigFunction('badge', [$this, 'badgeImage']),
-        ];
+        // this simple example doesn't define any dependency, but in your own
+        // extensions, you'll need to inject services using this constructor
     }
 
     public function badgeImage($service_name, $type, $repo, $style = [], $extra = '')
