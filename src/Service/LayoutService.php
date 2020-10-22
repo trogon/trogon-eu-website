@@ -43,6 +43,10 @@ class LayoutService
             'route' => 'https://www.github.com/trogon/'
         ];
         $this->socialLinks[] = [
+            'label' => 'Hackster',
+            'route' => 'https://www.hackster.io/trogon/'
+        ];
+        $this->socialLinks[] = [
             'label' => 'Twitter',
             'icon' => 'twitter',
             'iconStyle' => 'color:rgb(29, 161, 242)',
