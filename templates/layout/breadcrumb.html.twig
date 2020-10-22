@@ -5,11 +5,11 @@
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
 {% for item in layout.breadcrumbs %}
-    {% if item == lastItem %}
+    {%~ if item == lastItem %}
             <li class="breadcrumb-item active" aria-current="page">{{ item.label }}</li>
-    {% else %}
+    {%~ else %}
             <li class="breadcrumb-item"><a href="{{ path(item.route) }}">{{ item.label }}</a></li>
-    {% endif %}
+    {%~ endif %}
 {% endfor %}
         </ol>
     </nav>
