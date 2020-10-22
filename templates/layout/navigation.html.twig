@@ -3,36 +3,46 @@
 {% set currentRoute = app.request.attributes.get('_route') %}
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-        <a class="navbar-brand" href="#">
-            {% include "logo.html.twig" %}
-            <span>Trogon</span>
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
+	<div class="container">
+		<a class="navbar-brand" href="#">
+			{%~ include "logo.html.twig" %}
+			<span>Trogon</span>
+		</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav mr-auto">
 {% for item in layout.mainMenu %}
-    {% set isActive = item.route == currentRoute %}
-                <li class="nav-item{% if isActive %} active{% endif %}">
-                    <a class="nav-link" href="{{ path(item.route) }}">
-                        {{ item.label }}
-    {% if isActive %}
-                        <span class="sr-only">(current)</span>
-    {% endif %}
-                    </a>
-                </li>
+	{%- set isActive = item.route == currentRoute %}
+				<li class="nav-item{% if isActive %} active{% endif %}">
+					<a class="nav-link" href="{{ path(item.route) }}">
+						{{- item.label -}}
+	{%- if isActive -%}
+						<span class="sr-only">(current)</span>
+	{%- endif -%}
+					</a>
+				</li>
 {% endfor %}
-            </ul>
-            <span class="navbar-text">
-                <a class="pr-2" href="https://www.linkedin.com/in/mklemarczyk/"><i class="fab fa-linkedin" style="color:rgb(0, 115, 177)"></i></a>
-                <a class="px-2" href="https://www.bitbucket.org/trogon-studios/"><i class="fab fa-bitbucket" style="color:rgb(38, 132, 255)"></i></a>
-                <a class="px-2" href="https://www.github.com/trogon/"><i class="fab fa-github"></i></a>
-                <a class="px-2" href="https://www.twitter.com/maciekpak/"><i class="fab fa-twitter" style="color:rgb(29, 161, 242)"></i></a>
-                <a class="pl-2" href="https://www.youtube.com/channel/UCcnwMFLxso4AGmHSU_ftnqQ/"><i class="fab fa-youtube" style="color:rgb(255, 0, 0)"></i></a>
-            </span>
-        </div>
-    </div>
+			</ul>
+			<span class="navbar-text">
+{% for item in layout.socialLinks %}
+	{%- set margin = "px-2" %}
+	{%- if loop.length > 1 and loop.first %}
+		{%- set margin = "pr-2" %}
+	{%- elseif loop.length > 1 and loop.last %}
+		{%- set margin = "pl-2" %}
+	{%- endif %}
+				<a class="{{ margin }}" href="{{ absolute_url(item.route) }}"{% if item.icon is defined %} aria-label="{{ item.label }}" data-toggle="tooltip" data-placement="bottom" title="{{ item.label }}"{% endif %}>
+		{%- if item.icon is defined -%}
+					<i class="fab fa-{{ item.icon }}"{% if item.iconStyle is defined %}style="{{ item.iconStyle }}"{% endif %}></i>
+		{%- else -%}
+					{{ item.label }}
+		{%- endif -%}
+				</a>
+{% endfor %}
+			</span>
+		</div>
+	</div>
 </nav>
