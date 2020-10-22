@@ -88,4 +88,20 @@ Encore
     //.addEntry('admin', './assets/admin.js')
     ;
 
+
+if (Encore.isProduction()) {
+    Encore
+        .configureDefinePlugin((options) => {
+            options['process.env'].__API__ = JSON.stringify('/api');
+            console.log(options);
+        })
+        ;
+} else {
+    Encore
+        .configureDefinePlugin((options) => {
+            options['process.env'].__API__ = JSON.stringify('/~trogon_web/public/api');
+        })
+        ;
+}
+
 module.exports = Encore.getWebpackConfig();

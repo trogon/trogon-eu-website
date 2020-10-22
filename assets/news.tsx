@@ -5,7 +5,8 @@ import jQuery from 'jquery';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-const __API__ = "http://127.0.0.1/~trogon_web/public/api";
+const __API__ = process.env.__API__;
+const itemsPerPage = 9;
 
 interface NewsModel {
     id: number;
@@ -46,7 +47,9 @@ function NewsFeed(props: NewsFeedProps): JSX.Element {
 }
 
 jQuery(function () {
-    fetch(`"${__API__}/news?page=1&itemsPerPage=9"`, {
+    var page = 1;
+
+    fetch(`${__API__}/news?page=${page}&itemsPerPage=${itemsPerPage}`, {
         "method": "GET"
     })
         .then(response => response.json())
