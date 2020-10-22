@@ -36,7 +36,7 @@
 	{%- endif %}
 				<a class="{{ margin }}" href="{{ absolute_url(item.route) }}"{% if item.icon is defined %} aria-label="{{ item.label }}" data-toggle="tooltip" data-placement="bottom" title="{{ item.label }}"{% endif %}>
 		{%- if item.icon is defined -%}
-					<i class="fab fa-{{ item.icon }}"{% if item.iconStyle is defined %}style="{{ item.iconStyle }}"{% endif %}></i>
+					<i class="{{ item.icon }}"{% if item.iconStyle is defined %}style="{{ item.iconStyle }}"{% endif %}></i>
 		{%- else -%}
 					{{ item.label }}
 		{%- endif -%}
