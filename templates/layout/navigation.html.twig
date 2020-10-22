@@ -27,11 +27,22 @@
 {% endfor %}
             </ul>
             <span class="navbar-text">
-                <a class="pr-2" href="https://www.linkedin.com/in/mklemarczyk/"><i class="fab fa-linkedin" style="color:rgb(0, 115, 177)"></i></a>
-                <a class="px-2" href="https://www.bitbucket.org/trogon-studios/"><i class="fab fa-bitbucket" style="color:rgb(38, 132, 255)"></i></a>
-                <a class="px-2" href="https://www.github.com/trogon/"><i class="fab fa-github"></i></a>
-                <a class="px-2" href="https://www.twitter.com/maciekpak/"><i class="fab fa-twitter" style="color:rgb(29, 161, 242)"></i></a>
-                <a class="pl-2" href="https://www.youtube.com/channel/UCcnwMFLxso4AGmHSU_ftnqQ/"><i class="fab fa-youtube" style="color:rgb(255, 0, 0)"></i></a>
+{% for item in layout.socialLinks %}
+    {% set margin = "px-2" %}
+    {% if loop.length > 1 and loop.first %}
+        {% set margin = "pr-2" %}
+    {% elseif loop.length > 1 and loop.last %}
+        {% set margin = "pl-2" %}
+    {% endif %}
+
+                <a class="{{ margin }}" href="{{ absolute_url(item.route) }}"{% if item.icon is defined %} aria-label="{{ item.label }}"{% endif %}>
+    {% if item.icon is defined %}
+                    <i class="fab fa-{{ item.icon }}"{% if item.iconStyle is defined %}style="{{ item.iconStyle }}"{% endif %}></i>
+    {% else %}
+                    {{ item.label }}
+    {% endif %}
+                </a>
+{% endfor %}
             </span>
         </div>
     </div>
