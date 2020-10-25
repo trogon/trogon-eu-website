@@ -55,37 +55,40 @@ interface NewsPaginationProps {
 interface NewsPaginationLinkProps {
     currentPage: number;
     page?: number;
-    itemsPerPage: number;
     totalPages: number;
 }
 
 function NewsPaginationPrevious(props: NewsPaginationLinkProps): JSX.Element {
-    const { currentPage, itemsPerPage, totalPages } = props;
+    const { currentPage } = props;
 
     if (currentPage > 1) {
-        return (<li className="page-item"><a className="page-link" href="#">Previous</a></li>);
+        return (<li className="page-item"><a className="page-link" href={"#page-" + (currentPage - 1)} onClick={() => loadNews(currentPage - 1)}>Previous</a></li>);
     } else {
-        return (<li className="page-item disabled"><a className="page-link" href="#">Previous</a></li>);
+        return (<li className="page-item disabled"><a className="page-link" href={"#page-" + (currentPage - 1)}>Previous</a></li>);
     }
 }
 
 function NewsPaginationNext(props: NewsPaginationLinkProps): JSX.Element {
-    const { currentPage, itemsPerPage, totalPages } = props;
+    const { currentPage, totalPages } = props;
 
     if (currentPage < totalPages) {
-        return (<li className="page-item"><a className="page-link" href="#">Next</a></li>);
+        return (<li className="page-item"><a className="page-link" href={"#page-" + (currentPage + 1)} onClick={() => loadNews(currentPage + 1)}>Next</a></li>);
     } else {
-        return (<li className="page-item disabled"><a className="page-link" href="#">Next</a></li>);
+        return (<li className="page-item disabled"><a className="page-link" href={"#page-" + (currentPage + 1)}>Next</a></li>);
     }
 }
 
 function NewsPaginationLink(props: NewsPaginationLinkProps): JSX.Element {
-    const { currentPage, page, itemsPerPage, totalPages } = props;
+    const { currentPage, page } = props;
 
-    if (currentPage != page) {
-        return (<li className="page-item"><a className="page-link" href="#">{page}</a></li>);
+    if (page) {
+        if (currentPage != page) {
+            return <li className="page-item"><a className="page-link" href={"#page-" + page} onClick={() => loadNews(page)}>{page}</a></li>;
+        } else {
+            return <li className="page-item disabled"><a className="page-link" href={"#page-" + page}>{page}</a></li>;
+        }
     } else {
-        return (<li className="page-item disabled"><a className="page-link" href="#">{page}</a></li>);
+        return <li className="page-item disabled"><a className="page-link" href="#">Undefined</a></li>;
     }
 }
 
@@ -97,19 +100,16 @@ function NewsPagination(props: NewsPaginationProps): JSX.Element {
     return (
         <nav aria-label="Page navigation example">
             <ul className="pagination justify-content-center">
-                <NewsPaginationPrevious currentPage={currentPage} itemsPerPage={itemsPerPage} totalPages={totalPages} />
-                {pages.map(item => <NewsPaginationLink key={item} currentPage={currentPage} page={item} itemsPerPage={itemsPerPage} totalPages={totalPages} />)}
-                <NewsPaginationNext currentPage={currentPage} itemsPerPage={itemsPerPage} totalPages={totalPages} />
+                <NewsPaginationPrevious currentPage={currentPage} totalPages={totalPages} />
+                {pages.map(item => <NewsPaginationLink key={item} currentPage={currentPage} page={item} totalPages={totalPages} />)}
+                <NewsPaginationNext currentPage={currentPage} totalPages={totalPages} />
             </ul>
         </nav>
     );
 }
 
-jQuery(function () {
-    let page = 1;
+function loadNews(page: number) {
     let newsDomContainer = document.querySelector('#news');
-
-    itemsPerPage = jQuery('#news').data("items-per-page") ?? itemsPerPage;
 
     fetch(`${__API__}/news?page=${page}&itemsPerPage=${itemsPerPage}`, {
         "method": "GET"
@@ -121,4 +121,20 @@ jQuery(function () {
         .catch(err => {
             console.log(err);
         });
+}
+
+jQuery(function () {
+    var page = 1;
+
+    if (window.location.hash && window.location.hash.startsWith("#page-")) {
+        let pageFragment = window.location.hash;
+        let pageNumber = Number(pageFragment.substring(6));
+        if (!Number.isNaN(pageNumber)) {
+            page = pageNumber;
+        }
+    }
+
+    itemsPerPage = jQuery('#news').data("items-per-page") ?? itemsPerPage;
+
+    loadNews(page);
 });
