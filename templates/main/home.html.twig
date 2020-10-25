@@ -7,7 +7,7 @@
 	<p class="lead">Welcome to Trogon official webpage. Here you can fild information about ongoing projects.</p>
 </div>
 
-<div id="news">
+<div id="news" data-items-per-page="{{ itemsPerPage }}">
 	<div class="row">
 {% for item in news %}
 		<div class="col-md-4">
