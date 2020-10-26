@@ -1,6 +1,8 @@
 <?php
 namespace App\Controller;
 
+use Doctrine\Common\Collections\Criteria;
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -13,11 +15,17 @@ class MainController extends AbstractController
      */
     public function home()
     {
+        $itemPerPage = 9;
+
+        $criteria = Criteria::create()
+            ->setMaxResults($itemPerPage);
+
         $news = $this->getDoctrine()
             ->getRepository(News::class)
-            ->findAllOrderedByCreatedOn();
+            ->findAllOrderedByCreatedOn($criteria);
 
         return $this->render('main/home.html.twig', [
+            'itemsPerPage' => $itemPerPage,
             'news' => $news,
         ]);
     }

@@ -6,14 +6,29 @@ if (!Encore.isRuntimeEnvironmentConfigured()) {
     Encore.configureRuntimeEnvironment(process.env.NODE_ENV || 'dev');
 }
 
-Encore
-    // directory where compiled assets will be stored
-    .setOutputPath('public/build/')
-    // public path used by the web server to access the output path
-    .setPublicPath('build')
-    // only needed for CDN's or sub-directory deploy
-    //.setManifestKeyPrefix('build/')
 
+if (Encore.isProduction()) {
+    Encore
+        // directory where compiled assets will be stored
+        .setOutputPath('public/assets/')
+        // public path used by the web server to access the output path
+        .setPublicPath('/assets')
+        // only needed for CDN's or sub-directory deploy
+        //.setManifestKeyPrefix('build/')
+        ;
+} else {
+    Encore
+        // directory where compiled assets will be stored
+        .setOutputPath('public/assets-dev/')
+        // public path used by the web server to access the output path
+        .setPublicPath('assets-dev')
+        // only needed for CDN's or sub-directory deploy
+        //.setManifestKeyPrefix('build/')
+        ;
+}
+
+
+Encore
     /*
      * ENTRY CONFIG
      *
@@ -24,8 +39,8 @@ Encore
      * and one CSS file (e.g. app.css) if your JavaScript imports CSS.
      */
     .addEntry('app', './assets/app.ts')
+    .addEntry('news', './assets/news.tsx')
     .addEntry('project', './assets/project.tsx')
-    //.addEntry('page2', './assets/page2.js')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
@@ -71,6 +86,22 @@ Encore
 
     // uncomment if you use API Platform Admin (composer req api-admin)
     //.addEntry('admin', './assets/admin.js')
-;
+    ;
+
+
+if (Encore.isProduction()) {
+    Encore
+        .configureDefinePlugin((options) => {
+            options['process.env'].__API__ = JSON.stringify('/api');
+            console.log(options);
+        })
+        ;
+} else {
+    Encore
+        .configureDefinePlugin((options) => {
+            options['process.env'].__API__ = JSON.stringify('/~trogon_web/public/api');
+        })
+        ;
+}
 
 module.exports = Encore.getWebpackConfig();
