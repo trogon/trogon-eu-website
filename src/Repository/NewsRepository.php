@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\News;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -22,9 +23,15 @@ class NewsRepository extends ServiceEntityRepository
     /**
      * @return News[] Returns an array of News objects, use reference as result array key
      */
-    public function findAllIndexedByReference()
+    public function findAllIndexedByReference(Criteria $criteria = null)
     {
-        return $this->createQueryBuilder('n', 'n.reference')
+        return $this->createQueryBuilder('n', 'n.reference');
+
+        if ($criteria != null) {
+            $qb->addCriteria($criteria);
+        }
+
+        return $qb
             ->getQuery()
             ->getResult()
         ;
@@ -33,10 +40,16 @@ class NewsRepository extends ServiceEntityRepository
     /**
      * @return News[] Returns an array of News objects, use ordered by time
      */
-    public function findAllOrderedByCreatedOn()
+    public function findAllOrderedByCreatedOn(Criteria $criteria = null)
     {
-        return $this->createQueryBuilder('n')
-            ->orderBy('n.created_on', 'DESC')
+        $qb = $this->createQueryBuilder('n')
+            ->orderBy('n.created_on', 'DESC');
+
+        if ($criteria != null) {
+            $qb->addCriteria($criteria);
+        }
+
+        return $qb
             ->getQuery()
             ->getResult()
         ;
