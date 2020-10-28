@@ -6,6 +6,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 const __API__ = process.env.__API__;
+let dateOptions = {
+    year: 'numeric', month: 'long', day: 'numeric',
+    hour: 'numeric', minute: 'numeric',
+    hour12: false
+  };
 var itemsPerPage = 9;
 
 interface NewsModel {
@@ -24,12 +29,12 @@ function News(props: NewsProps): JSX.Element {
         <div className="col-md-4">
             <div className="card mb-4 shadow-sm">
                 <div className="card-header">
-                    {props.data.title}
+                    { props.data.title }
                 </div>
                 <div className="card-body">
                     <p className="card-text" dangerouslySetInnerHTML={{ __html: props.data.summary }}></p>
                     <div className="d-flex justify-content-between align-items-center">
-                        <small className="text-muted">{props.data.createdOn}</small>
+                        <small className="text-muted">{ new Date(props.data.createdOn).toLocaleString([], dateOptions) }</small>
                     </div>
                 </div>
             </div>
