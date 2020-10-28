@@ -14,7 +14,7 @@ class WebhookController extends AbstractController
      */
     public function receivePayload(Request $request, LoggerInterface $logger)
     {
-        $logger->info($request->getContent(), ["source" => "webhook", "format" => "json"]);
+        $logger->critical($request->getContent(), ["source" => "webhook", "format" => "json"]);
 
         return $this->json([
             "status" => "OK",
