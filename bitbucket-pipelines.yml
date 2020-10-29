@@ -1,0 +1,55 @@
+pipelines:
+  default:
+    - step:
+        name: Build assets
+        image: node:10.15.0
+        caches:
+          - node
+        script:
+          - yarn install
+          - yarn run encore production
+        artifacts:
+          # defining the artifacts to be passed to each future step.
+          - public/assets/*
+
+    - step:
+        name: Build and test backend
+        image: composer:2
+        caches:
+          - composer
+        script:
+          - composer install
+          - composer dump-env test
+          - chmod +x bin/phpunit
+          - bin/phpunit
+        artifacts:
+          # defining the artifacts to be passed to each future step.
+          - reports/*.txt
+
+    - step:
+        name: Deploy to UAT
+        deployment: staging
+        image: composer:2
+        caches:
+          - composer
+        script:
+          - composer install
+          - composer dump-env prod
+          - chmod +x bin/phpunit
+          - bin/phpunit
+          - pipe: atlassian/ftp-deploy:0.3.5
+            variables:
+              USER: $uat_ftp_user
+              PASSWORD: $uat_ftp_password
+              SERVER: $uat_ftp_server
+              REMOTE_PATH: $uat_remote_path
+
+definitions:
+  services:
+    mysql5:
+      image: mysql:5.7
+      variables:
+        MYSQL_DATABASE: 'pipelines'
+        MYSQL_RANDOM_ROOT_PASSWORD: 'yes' 
+        MYSQL_USER: 'test_user'
+        MYSQL_PASSWORD: 'test_user_password'
