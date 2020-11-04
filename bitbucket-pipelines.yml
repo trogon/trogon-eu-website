@@ -37,12 +37,13 @@ pipelines:
           - composer dump-env prod
           - chmod +x bin/phpunit
           - bin/phpunit
-          - pipe: atlassian/ftp-deploy:0.3.5
-            variables:
-              USER: $uat_ftp_user
-              PASSWORD: $uat_ftp_password
-              SERVER: $uat_ftp_server
-              REMOTE_PATH: $uat_remote_path
+# Deploy the files to FTP
+#          - pipe: atlassian/ftp-deploy:0.3.5
+#            variables:
+#              USER: $uat_ftp_user
+#              PASSWORD: $uat_ftp_password
+#              SERVER: $uat_ftp_server
+#              REMOTE_PATH: $uat_remote_path
 
 definitions:
   services:
