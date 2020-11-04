@@ -25,7 +25,7 @@ class NewsRepository extends ServiceEntityRepository
      */
     public function findAllIndexedByReference(Criteria $criteria = null)
     {
-        return $this->createQueryBuilder('n', 'n.reference');
+        $qb = $this->createQueryBuilder('n', 'n.reference');
 
         if ($criteria != null) {
             $qb->addCriteria($criteria);
