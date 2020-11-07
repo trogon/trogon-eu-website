@@ -1,0 +1,122 @@
+# PHP and Node.js
+# Test and package your PHP project.
+# Add steps that run tests, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/php
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  phpVersion: 7.3
+  COMPOSER_CACHE_DIR: $(Pipeline.Workspace)/.composer
+  YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+
+- task: Cache@2
+  inputs:
+    key: 'yarn | "$(Agent.OS)" | yarn.lock'
+    restoreKeys: |
+       yarn | "$(Agent.OS)"
+    path: $(YARN_CACHE_FOLDER)
+  displayName: Cache Yarn packages
+
+- script: |
+    yarn install
+    yarn run encore production
+  displayName: 'yarn install and build assets'
+
+- script: |
+    sudo update-alternatives --set php /usr/bin/php$(phpVersion)
+    sudo update-alternatives --set phar /usr/bin/phar$(phpVersion)
+    sudo update-alternatives --set phpdbg /usr/bin/phpdbg$(phpVersion)
+    sudo update-alternatives --set php-cgi /usr/bin/php-cgi$(phpVersion)
+    sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
+    php -version
+  displayName: 'Use PHP version $(phpVersion)'
+
+- task: Cache@2
+  inputs:
+    key: 'composer | "$(Agent.OS)" | composer.lock'
+    restoreKeys: |
+      composer | "$(Agent.OS)"
+      composer
+    path: $(COMPOSER_CACHE_DIR)
+  displayName: Cache composer
+
+- script: composer install --no-interaction --prefer-dist
+  displayName: 'composer install'
+
+- script: composer dump-env test
+  displayName: 'composer dump-env test'
+
+- script: php $(Build.SourcesDirectory)/bin/console cache:clear
+  displayName: 'clean symfony cache'
+
+- script: php $(Build.SourcesDirectory)/bin/phpunit
+  displayName: 'test symfony application'
+
+- script: composer install --no-interaction --prefer-dist
+  displayName: 'composer install --no-dev'
+
+- task: DownloadSecureFile@1
+  name: prodEnvLocal
+  displayName: 'Download prod configuration'
+  inputs:
+    secureFile: '.env.prod.local'
+
+- script: |
+    echo Installing $(prodEnvLocal.secureFilePath) to env configuration...
+    cp $(prodEnvLocal.secureFilePath) $(Build.SourcesDirectory)
+    composer dump-env prod
+  displayName: 'composer dump-env prod'
+
+- task: CopyFiles@2
+  displayName: 'prepare release files'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: |
+      bin/*
+      config/**
+      migrations/**
+      public/**
+      scripts/**
+      src/**
+      templates/**
+      translations/**
+      vendor/**
+      .env.local.php
+      composer.lock
+      symfony.lock
+      yarn.lock
+    TargetFolder: '$(Pipeline.Workspace)/release'
+    CleanTargetFolder: true
+
+- task: CopyFiles@2
+  displayName: 'prepare release htaccess file'
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)/public'
+    Contents: 'prod/.htaccess'
+    TargetFolder: '$(Pipeline.Workspace)/release/public'
+    OverWrite: true
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: '$(Pipeline.Workspace)/release'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'release_prd'
+    publishLocation: 'Container'
