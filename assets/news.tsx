@@ -1,4 +1,5 @@
-'use strict';
+// assets/news.ts
+"use strict";
 
 import jQuery from 'jquery';
 

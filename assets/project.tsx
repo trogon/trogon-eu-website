@@ -1,4 +1,5 @@
-// assets/project.tsx
+// assets/project.ts
+"use strict";
 
 import './styles/project.scss';
 
