@@ -1,8 +1,8 @@
-{# templates/project/number.html.twig #}
+{# templates/project/list.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="jumbotron">
+<div class="mb-4 px-4 py-5 text-black bg-light">
 	<h1 class="display-4">Project</h1>
 	<p class="lead">List of currently ongoing projects. <span id="show_hide_archived_container" class="d-none d-sm-inline float-right"></span></p>
 	<hr class="my-4">
@@ -10,7 +10,7 @@
 	<div class="card">
 		{% for item in projects %}
 		<div class="card-body project{% if item.isArchived %} archived{% endif %}" data-id="{{ item.id }}">
-			<h5 class="card-title">{{ item.name }} {% if item.isArchived %}<span class="badge badge-info">Archived</span>{% endif %}</h5>
+			<h5 class="card-title">{{ item.name }} {% if item.isArchived %}<span class="badge bg-info text-dark">Archived</span>{% endif %}</h5>
 			<p class="card-text">{{ item.description }}</p>
 			<a href="{{ url('app_project_show', {'name': item.fullName|url_encode }) }}" class="btn btn-primary">Project page</a>
 		</div>

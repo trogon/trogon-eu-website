@@ -13,13 +13,13 @@
 		{{ breadcrumb() }}
 		<div class="container">
 			{% block body %}{% endblock %}
-			<footer class="footer">
+			<footer class="footer mb-3 px-3 py-2 text-black bg-light rounded-3">
 				<div class="container">
 					<div class="row">
-						<div class="col-7 col-sm text-left">
+						<div class="col-auto col-sm">
 							&copy; Trogon 2017 - {{ date() | date("Y") }}
 						</div>
-						<div class="d-none d-sm-none d-md-block col-md col-lg-7 col-xl-7 text-center">
+						<div class="col text-center d-none d-md-block">
 							<small class="text-muted">
 								Powered by
 								<a href="https://api-platform.com/" target="_blank">API Platform</a>,
@@ -29,8 +29,8 @@
 								<a href="https://symfony.com/" target="_blank">Symfony</a>
 							</small>
 						</div>
-						<div class="col-5 col-sm text-right">
-							Version: 2.9.2011
+						<div class="col col-md-auto text-end">
+							Version: 2.10.2108
 						</div>
 					</div>
 				</div>

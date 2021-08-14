@@ -2,7 +2,7 @@ pipelines:
   default:
     - step:
         name: Build assets
-        image: node:10.15.0
+        image: node:lts
         caches:
           - node
         script:

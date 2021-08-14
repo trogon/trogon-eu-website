@@ -1,0 +1,30 @@
+// assets/styles/tool.scss
+@import "~bootstrap/scss/bootstrap";
+
+.band-color-Black {
+    @include button-variant($primary, $primary, $active-background: $black);
+}
+.band-color-Brown {
+    @include button-variant($primary, $primary, $active-background: $orange-800);
+}
+.band-color-Red {
+    @include button-variant($primary, $primary, $active-background: $red-600);
+}
+.band-color-Orange {
+    @include button-variant($primary, $primary, $active-background: $orange-500);
+}
+.band-color-Yellow {
+    @include button-variant($primary, $primary, $active-background: $yellow-400);
+}
+.band-color-Green {
+    @include button-variant($primary, $primary, $active-background: $green-500);
+}
+.band-color-Violet {
+    @include button-variant($primary, $primary, $active-background: $indigo-500);
+}
+.band-color-Grey {
+    @include button-variant($primary, $primary, $active-background: $gray-500);
+}
+.band-color-White {
+    @include button-variant($primary, $primary, $active-background: $gray-200);
+}

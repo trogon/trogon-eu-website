@@ -2,8 +2,8 @@
 
 {% set lastItem = layout.breadcrumbs | last %}
 <div class="container">
-	<nav aria-label="breadcrumb">
-		<ol class="breadcrumb">
+	<nav class="mt-1 mb-3 px-3 py-2 text-black bg-light rounded-3" aria-label="breadcrumb">
+		<ol class="breadcrumb m-0">
 {% for item in layout.breadcrumbs %}
 	{%~ if item == lastItem %}
 			<li class="breadcrumb-item active" aria-current="page">{{ item.label }}</li>

@@ -1,0 +1,27 @@
+{# templates/tool/list.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="mb-4 px-4 py-5 text-black bg-light">
+	<h1 class="display-4">Tools</h1>
+	<p class="lead">List of currently ongoing projects. <span id="show_hide_archived_container" class="d-none d-sm-inline float-right"></span></p>
+	<hr class="my-4">
+	<!-- tool items block -->
+	<div class="card">
+		<div class="card-body">
+			<h5 class="card-title">Resistor value</h5>
+			<div class="card-text"><div id="tool"></div></div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+		{{ encore_entry_link_tags('tool') }}
+{% endblock %}
+
+{% block javascripts %}
+{{ parent() }}
+		{{ encore_entry_script_tags('tool') }}
+{% endblock %}

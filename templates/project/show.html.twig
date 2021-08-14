@@ -1,8 +1,8 @@
-{# templates/project/number.html.twig #}
+{# templates/project/show.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block body %}
-<div class="jumbotron">
+<div class="mb-4 px-4 py-5 text-black bg-light">
 	<h1 class="display-4">Project {{ project.name }}</h1>
 	<p class="lead">
 {% if project.provider == 'bitbucket' %}
@@ -24,7 +24,7 @@
 	<!-- description block -->
 	<div class="card">
 		<div class="card-body">
-			<h5 class="card-title">Description</h5>
+			<h5 class="card-title">Description {% if project.isArchived %}<span class="badge bg-info text-dark">Project is archived</span>{% endif %}</h5>
 			<p class="card-text">{{ project.description }}</p>
 			<a href="{{ project.repoLink }}" class="btn btn-secondary">Repository page</a>
 		</div>

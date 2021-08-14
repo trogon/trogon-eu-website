@@ -41,6 +41,7 @@ Encore
     .addEntry('app', './assets/app.ts')
     .addEntry('news', './assets/news.tsx')
     .addEntry('project', './assets/project.tsx')
+    .addEntry('tool', './assets/tool.tsx')
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
