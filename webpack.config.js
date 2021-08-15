@@ -38,7 +38,7 @@ Encore
     .addEntry('app', './assets/app.ts')
     .addEntry('news', './assets/news.tsx')
     .addEntry('project', './assets/project.tsx')
-    .addEntry('tool', './assets/tool.tsx')
+    .addEntry('resistance-tool', './assets/tools/resistance.tsx')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
     // .enableStimulusBridge('./assets/controllers.json')

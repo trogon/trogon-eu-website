@@ -1,7 +1,7 @@
-// assets/tool.ts
+// assets/tools/resistance.tsx
 "use strict";
 
-import "./styles/tool.scss";
+import "./styles/resistance.scss";
 
 import jQuery from "jquery";
 
