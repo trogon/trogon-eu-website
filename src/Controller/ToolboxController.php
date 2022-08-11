@@ -21,9 +21,28 @@ class ToolboxController extends AbstractController
 
         $tools = [];
         $i = 0;
+        $tools[] = ['id' => $i++, 'name' => 'Hash', 'route' => 'app_toolbox_hash', 'description' => 'Computes hash'];
         $tools[] = ['id' => $i++, 'name' => 'Resistance', 'route' => 'app_toolbox_resistance', 'description' => 'Resistance label decoder'];
 
         return $this->render('toolbox/list.html.twig', ['tools' => $tools]);
+    }
+
+    /**
+     * @Route("/toolbox/hash", methods={"GET"})
+     */
+    public function hash(
+        LayoutService $layout)
+    {
+        $layout->breadcrumbs[] = [
+            'label' => 'Toolbox',
+            'route' => 'app_toolbox_list'
+        ];
+        $layout->breadcrumbs[] = [
+            'label' => 'Hash',
+            'route' => 'app_toolbox_hash'
+        ];
+
+        return $this->render('toolbox/hash.html.twig');
     }
 
     /**
