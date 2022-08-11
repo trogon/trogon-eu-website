@@ -1,6 +1,7 @@
 <?php
 namespace App\Controller;
 
+
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -9,7 +10,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpClient\Exception\TransportException;
 
-use App\Entity\Project;
+use App\Repository\ProjectRepository;
 
 class ProjectController extends AbstractController
 {
@@ -19,15 +20,15 @@ class ProjectController extends AbstractController
      * @Route("/projects", methods={"GET"})
      */
     public function list(
-        LayoutService $layout)
+        LayoutService $layout,
+        ProjectRepository $projectDb)
     {
         $layout->breadcrumbs[] = [
             'label' => 'Projects',
             'route' => 'app_project_list'
         ];
 
-        $projects = $this->getDoctrine()
-            ->getRepository(Project::class)
+        $projects = $projectDb
             ->findBy(['is_private' => $this->showPrivate]);
 
         usort($projects, function ($a, $b) {
@@ -44,12 +45,12 @@ class ProjectController extends AbstractController
      */
     public function show(
         $name,
-        LayoutService $layout)
+        LayoutService $layout,
+        ProjectRepository $projectDb)
     {
         $full_name = urldecode($name);
 
-        $projects = $this->getDoctrine()
-            ->getRepository(Project::class)
+        $projects = $projectDb
             ->findBy(['is_private' => $this->showPrivate, 'full_name' => $full_name]);
 
         usort($projects, function ($a, $b) {

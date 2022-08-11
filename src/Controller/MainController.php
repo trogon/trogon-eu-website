@@ -6,22 +6,22 @@ use Doctrine\Common\Collections\Criteria;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 
-use App\Entity\News;
+use App\Repository\NewsRepository;
 
 class MainController extends AbstractController
 {
     /**
      * @Route("/", methods={"GET"})
      */
-    public function home()
+    public function home(
+        NewsRepository $newsDb)
     {
         $itemPerPage = 9;
 
         $criteria = Criteria::create()
             ->setMaxResults($itemPerPage);
 
-        $news = $this->getDoctrine()
-            ->getRepository(News::class)
+        $news = $newsDb
             ->findAllOrderedByCreatedOn($criteria);
 
         return $this->render('main/home.html.twig', [

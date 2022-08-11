@@ -54,7 +54,7 @@ class UpdateProjectNewsCommand extends Command
             ->setHelp('This command updates project data stored in local database from third-party services eg. github, bitbucket etc.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln([
             'Project News Update',
@@ -76,6 +76,8 @@ class UpdateProjectNewsCommand extends Command
         //$this->updateGithubNews($output, $entityManager, $news_list);
 
         $output->writeln('Process finished.');
+        
+        return 0;
     }
 
     private function getBitbucketAuthToken($output)
