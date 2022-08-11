@@ -93,6 +93,7 @@ steps:
       translations/**
       vendor/**
       .env.local.php
+      composer.json
       composer.lock
       symfony.lock
       yarn.lock
