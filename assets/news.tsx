@@ -1,4 +1,5 @@
-'use strict';
+// assets/news.ts
+"use strict";
 
 import jQuery from 'jquery';
 
@@ -6,7 +7,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 const __API__ = process.env.__API__;
-let dateOptions = {
+let dateOptions: Intl.DateTimeFormatOptions = {
     year: 'numeric', month: 'long', day: 'numeric',
     hour: 'numeric', minute: 'numeric',
     hour12: false

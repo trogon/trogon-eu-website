@@ -8,25 +8,22 @@
 			{%~ include "logo.html.twig" %}
 			<span>Trogon</span>
 		</a>
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
-			<ul class="navbar-nav mr-auto">
+			<ul class="navbar-nav me-auto">
 {% for item in layout.mainMenu %}
 	{%- set isActive = item.route == currentRoute %}
-				<li class="nav-item{% if isActive %} active{% endif %}">
-					<a class="nav-link" href="{{ path(item.route) }}">
+				<li class="nav-item">
+					<a class="nav-link{% if isActive %} active" aria-current="page{% endif %}" href="{{ path(item.route) }}">
 						{{- item.label -}}
-	{%- if isActive -%}
-						<span class="sr-only">(current)</span>
-	{%- endif -%}
 					</a>
 				</li>
 {% endfor %}
 			</ul>
-			<span class="navbar-text">
+			<span class="d-flex">
 {% for item in layout.socialLinks %}
 	{%- set margin = "px-2" %}
 	{%- if loop.length > 1 and loop.first %}
