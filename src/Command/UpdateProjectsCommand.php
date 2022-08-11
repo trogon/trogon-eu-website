@@ -48,7 +48,7 @@ class UpdateProjectsCommand extends Command
             ->setHelp('This command updates project data stored in local database from third-party services eg. github, bitbucket etc.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln([
             'Projects Update',
@@ -69,6 +69,8 @@ class UpdateProjectsCommand extends Command
         $this->updateGithubProjects($output, $entityManager, $projects);
 
         $output->writeln('Process finished.');
+
+        return 0;
     }
 
     private function getBitbucketAuthToken($output)
