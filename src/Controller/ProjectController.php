@@ -44,11 +44,11 @@ class ProjectController extends AbstractController
      * @Route("/project/{name}", methods={"GET"})
      */
     public function show(
-        $name,
+        string $name,
         LayoutService $layout,
         ProjectRepository $projectDb)
     {
-        $full_name = urldecode($name);
+        $full_name = str_replace('%', '/', urldecode($name));
 
         $projects = $projectDb
             ->findBy(['is_private' => $this->showPrivate, 'full_name' => $full_name]);
@@ -70,7 +70,6 @@ class ProjectController extends AbstractController
             ];
 
             return $this->render('project/show.html.twig', [
-                'name' => urldecode($name),
                 'project' => $project,
             ]);
         } else {
