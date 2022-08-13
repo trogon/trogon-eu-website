@@ -6,7 +6,7 @@ import "./styles/tool.scss";
 import jQuery from "jquery";
 
 import React, { Component } from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
@@ -151,5 +151,6 @@ class ResistorValueTool extends Component {
 jQuery(function () {
   let toolDomContainer = document.querySelector("#tool");
 
-  ReactDOM.render(<ResistorValueTool />, toolDomContainer);
+  const root = createRoot(toolDomContainer!);
+  root.render(<ResistorValueTool />);
 });
