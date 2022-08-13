@@ -12,7 +12,7 @@
 		<div class="card-body project{% if item.isArchived %} archived{% endif %}" data-id="{{ item.id }}">
 			<h5 class="card-title">{{ item.name }} {% if item.isArchived %}<span class="badge bg-info text-dark">Archived</span>{% endif %}</h5>
 			<p class="card-text">{{ item.description }}</p>
-			<a href="{{ url('app_project_show', {'name': item.fullName|url_encode }) }}" class="btn btn-primary">Project page</a>
+			<a href="{{ url('app_project_show', {'name': item.fullName|url_encode|replace({'%2F': '%'}) }) }}" class="btn btn-primary">Project page</a>
 		</div>
 			{% if not loop.last %}
 		<hr{% if item.isArchived %} class="project archived"{% endif %}>
