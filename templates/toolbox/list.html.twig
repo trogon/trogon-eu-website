@@ -1,0 +1,23 @@
+{# templates/toolbox/list.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="mb-4 px-4 py-5 text-black bg-light">
+	<h1 class="display-4">Toolbox</h1>
+	<p class="lead">List of tools.</p>
+	<hr class="my-4">
+	<!-- project items block -->
+	<div class="card">
+		{% for item in tools %}
+		<div class="card-body project" data-id="{{ item.id }}">
+			<h5 class="card-title">{{ item.name }}</h5>
+			<p class="card-text">{{ item.description }}</p>
+			<a href="{{ url(item.route) }}" class="btn btn-primary">Open tool</a>
+		</div>
+			{% if not loop.last %}
+		<hr>
+			{% endif %}
+		{% endfor %}
+	</div>
+</div>
+{% endblock %}

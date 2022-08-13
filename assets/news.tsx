@@ -4,9 +4,11 @@
 import jQuery from 'jquery';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot, Root } from 'react-dom/client';
 
 const __API__ = process.env.__API__;
+let root: Root;
+
 let dateOptions: Intl.DateTimeFormatOptions = {
     year: 'numeric', month: 'long', day: 'numeric',
     hour: 'numeric', minute: 'numeric',
@@ -115,14 +117,12 @@ function NewsPagination(props: NewsPaginationProps): JSX.Element {
 }
 
 function loadNews(page: number) {
-    let newsDomContainer = document.querySelector('#news');
-
     fetch(`${__API__}/news?page=${page}&itemsPerPage=${itemsPerPage}`, {
         "method": "GET"
     })
         .then(response => response.json())
         .then(response => {
-            ReactDOM.render(<div><NewsFeed news={response["hydra:member"]} /><NewsPagination currentPage={page} itemsPerPage={itemsPerPage} totalItems={response["hydra:totalItems"]} /></div>, newsDomContainer);
+            root.render(<div><NewsFeed news={response["hydra:member"]} /><NewsPagination currentPage={page} itemsPerPage={itemsPerPage} totalItems={response["hydra:totalItems"]} /></div>);
         })
         .catch(err => {
             console.log(err);
@@ -130,6 +130,8 @@ function loadNews(page: number) {
 }
 
 jQuery(function () {
+    const newsDomContainer = document.querySelector('#news');
+    root = createRoot(newsDomContainer!);
     var page = 1;
 
     if (window.location.hash && window.location.hash.startsWith("#page-")) {

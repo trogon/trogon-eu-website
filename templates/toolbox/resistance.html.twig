@@ -1,12 +1,12 @@
-{# templates/tool/list.html.twig #}
+{# templates/toolbox/resistance.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block body %}
 <div class="mb-4 px-4 py-5 text-black bg-light">
-	<h1 class="display-4">Tools</h1>
-	<p class="lead">List of currently ongoing projects. <span id="show_hide_archived_container" class="d-none d-sm-inline float-right"></span></p>
+	<h1 class="display-4">Resistance</h1>
+	<p class="lead">Decodes resistor label into resistance value</p>
 	<hr class="my-4">
-	<!-- tool items block -->
+	<!-- tool item block -->
 	<div class="card">
 		<div class="card-body">
 			<h5 class="card-title">Resistor value</h5>
@@ -18,10 +18,10 @@
 
 {% block stylesheets %}
 {{ parent() }}
-		{{ encore_entry_link_tags('tool') }}
+		{{ encore_entry_link_tags('resistance-tool') }}
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
-		{{ encore_entry_script_tags('tool') }}
+		{{ encore_entry_script_tags('resistance-tool') }}
 {% endblock %}

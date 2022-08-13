@@ -25,8 +25,8 @@ class LayoutService
             'route' => 'app_project_list'
         ];
         $this->mainMenu[] = [
-            'label' => 'Tools',
-            'route' => 'app_tool_list'
+            'label' => 'Toolbox',
+            'route' => 'app_toolbox_list'
         ];
 
         $this->socialLinks[] = [
