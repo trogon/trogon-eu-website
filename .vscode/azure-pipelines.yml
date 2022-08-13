@@ -66,6 +66,12 @@ steps:
 - script: composer install --no-interaction --prefer-dist
   displayName: 'composer install --no-dev'
 
+- script: |
+    echo Installing prod .htaccess redirection...
+    rm $(Build.SourcesDirectory)/public/.htaccess
+    mv $(Build.SourcesDirectory)/public/prod/.htaccess $(Build.SourcesDirectory)/public/.htaccess
+  displayName: 'composer dump-env prod'
+
 - task: DownloadSecureFile@1
   name: prodEnvLocal
   displayName: 'Download prod configuration'
