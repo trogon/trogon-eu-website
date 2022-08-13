@@ -6,7 +6,7 @@ import './styles/project.scss';
 import jQuery from 'jquery';
 
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 class ShowArchivedProjectsButton extends Component {
   state = {
@@ -41,7 +41,9 @@ class ShowArchivedProjectsButton extends Component {
   }
 }
 
-ReactDOM.render(
-  <ShowArchivedProjectsButton />,
-  document.querySelector('#show_hide_archived_container')
-);
+jQuery(function () {
+  const showHideArchivedContainer = document.querySelector('#show_hide_archived_container');
+
+  const root = createRoot(showHideArchivedContainer!);
+  root.render(<ShowArchivedProjectsButton />);
+});
