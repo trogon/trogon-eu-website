@@ -130,6 +130,8 @@ class HashCalculatorTool extends Component {
     this.handleDirectionUpdate = this.handleDirectionUpdate.bind(this);
     this.handleAlgorithmUpdate = this.handleAlgorithmUpdate.bind(this);
     this.computeHash = this.computeHash.bind(this);
+
+    this.handleCopyToInput = this.handleCopyToInput.bind(this);
   }
 
   handleInputUpdate(value: string): void {
@@ -140,6 +142,10 @@ class HashCalculatorTool extends Component {
   }
   handleAlgorithmUpdate(value: number): void {
     this.computeHash({ ...this.state, selectedAlgorithm: value });
+  }
+
+  handleCopyToInput(): void {
+    this.computeHash({ ...this.state, inputValue: this.state.computedValue });
   }
 
   computeHash(newState: IAlgorithmState): void {
@@ -200,6 +206,7 @@ class HashCalculatorTool extends Component {
               as="textarea"
               rows={3}
               placeholder="Enter input here..."
+              value={this.state.inputValue}
               onChange={(e) => {
                 this.handleInputUpdate(e.target.value);
               }}
@@ -225,6 +232,12 @@ class HashCalculatorTool extends Component {
               readOnly={true}
               value={this.state.computedValue}
             />
+            <Button
+              value="copy-input"
+              onClick={(_) => this.handleCopyToInput()}
+            >
+              Copy to input
+            </Button>
           </div>
         </div>
       </div>
