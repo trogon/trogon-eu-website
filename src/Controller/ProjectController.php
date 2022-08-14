@@ -48,7 +48,8 @@ class ProjectController extends AbstractController
         LayoutService $layout,
         ProjectRepository $projectDb)
     {
-        $full_name = str_replace('%', '/', urldecode($name));
+        // Replace the % decoded symbol to / separator. The name variable is already URL decoded.
+        $full_name = str_replace('%', '/', $name);
 
         $projects = $projectDb
             ->findBy(['is_private' => $this->showPrivate, 'full_name' => $full_name]);
