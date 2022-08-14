@@ -4,4 +4,7 @@
 //$primary: darken(#428bca, 20%);
 
 // the ~ allows you to reference things in node_modules
-@import "~bootstrap/scss/bootstrap";
+@import "~bootstrap/dist/css/bootstrap";
+
+// Sass version contains a bug in version 5.2.0 for pagination
+//@import "~bootstrap/scss/bootstrap";
