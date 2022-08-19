@@ -23,6 +23,7 @@ class ToolboxController extends AbstractController
         $i = 0;
         $tools[] = ['id' => $i++, 'name' => 'Hash', 'route' => 'app_toolbox_hash', 'description' => 'Computes hash'];
         $tools[] = ['id' => $i++, 'name' => 'Resistance', 'route' => 'app_toolbox_resistance', 'description' => 'Resistance label decoder'];
+        $tools[] = ['id' => $i++, 'name' => 'Resolution', 'route' => 'app_toolbox_resolution', 'description' => 'Computes resolution, screen size and pixel density'];
 
         return $this->render('toolbox/list.html.twig', ['tools' => $tools]);
     }
@@ -61,5 +62,23 @@ class ToolboxController extends AbstractController
         ];
 
         return $this->render('toolbox/resistance.html.twig');
+    }
+
+    /**
+     * @Route("/toolbox/resolution", methods={"GET"})
+     */
+    public function resolution(
+        LayoutService $layout)
+    {
+        $layout->breadcrumbs[] = [
+            'label' => 'Toolbox',
+            'route' => 'app_toolbox_list'
+        ];
+        $layout->breadcrumbs[] = [
+            'label' => 'Resistance',
+            'route' => 'app_toolbox_resolution'
+        ];
+
+        return $this->render('toolbox/resolution.html.twig');
     }
 }
