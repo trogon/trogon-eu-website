@@ -1,10 +1,10 @@
-{# templates/toolbox/hash.html.twig #}
+{# templates/toolbox/resolution.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block body %}
 <div class="mb-4 px-4 py-5 text-black bg-light">
-	<h1 class="display-4">Hash decoder</h1>
-	<p class="lead">Encodes/decodes hash value</p>
+	<h1 class="display-4">IP network calculator</h1>
+	<p class="lead">Computes IP address, newtwork, mask</p>
 	<hr class="my-4">
 	<!-- tool item block -->
 	<div id="tool" class="card"></div>
@@ -13,10 +13,10 @@
 
 {% block stylesheets %}
 {{ parent() }}
-		{{ encore_entry_link_tags('hash-tool') }}
+	{{ encore_entry_link_tags('ip-address-tool') }}
 {% endblock %}
 
 {% block javascripts %}
 {{ parent() }}
-		{{ encore_entry_script_tags('hash-tool') }}
+	{{ encore_entry_script_tags('ip-address-tool') }}
 {% endblock %}
