@@ -94,7 +94,7 @@ class ToolboxController extends AbstractController
             'route' => 'app_toolbox_list'
         ];
         $layout->breadcrumbs[] = [
-            'label' => 'Resistance',
+            'label' => 'Resolution',
             'route' => 'app_toolbox_resolution'
         ];
 
