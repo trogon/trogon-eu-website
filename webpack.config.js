@@ -39,6 +39,7 @@ Encore
     .addEntry('news', './assets/news.tsx')
     .addEntry('project', './assets/project.tsx')
     .addEntry('hash-tool', './assets/tools/hash.tsx')
+    .addEntry('ip-address-tool', './assets/tools/ip-address.tsx')
     .addEntry('resistance-tool', './assets/tools/resistance.tsx')
     .addEntry('resolution-tool', './assets/tools/resolution.tsx')
 
