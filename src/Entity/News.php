@@ -2,65 +2,46 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ApiResource(
- *     iri="http://trogon.eu/News",
- *     collectionOperations={
- *         "get",
- *     },
- *     itemOperations={
- *         "get",
- *     },
- *     order={"created_on"="DESC"},
- * )
- * @ORM\Entity(repositoryClass="App\Repository\NewsRepository")
- */
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection()
+    ],
+)]
+#[ORM\Entity(repositoryClass: "App\Repository\NewsRepository")]
 class News
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=100)
-     */
+    #[ORM\Column(type: "string", length: 100)]
     private $title;
 
-    /**
-     * @ORM\Column(type="text")
-     */
+    #[ORM\Column(type: "text")]
     private $content;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
+
     private $summary;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Project", inversedBy="news")
-     */
+    #[ORM\ManyToOne(targetEntity: "App\Entity\Project", inversedBy: "news")]
     private $project;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private $reference;
 
-    /**
-     * @ORM\Column(type="datetimetz")
-     */
+    #[ORM\Column(type: "datetimetz")]
     private $created_on;
 
-    /**
-     * @ORM\Column(type="datetimetz", nullable=true)
-     */
+    #[ORM\Column(type: "datetimetz", nullable: true)]
     private $updated_on;
 
     public function getId(): ?int
