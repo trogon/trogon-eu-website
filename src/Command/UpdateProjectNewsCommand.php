@@ -1,8 +1,9 @@
 <?php
+
 namespace App\Command;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,7 +15,9 @@ use Doctrine\Persistence\ManagerRegistry;
 use Twig\Environment;
 
 use App\Entity\News;
-use App\Entity\Project;
+
+use App\Repository\NewsRepository;
+use App\Repository\ProjectRepository;
 
 use App\Service\BitbucketClientService;
 use App\Service\GithubClientService;
@@ -25,25 +28,15 @@ class UpdateProjectNewsCommand extends Command
     private static $bitbucketDateFormat = 'Y-m-d\TH:i:sP';
     private static $ghDateFormat = 'Y-m-d\TH:i:s\Z';
 
-    private $logger;
-    private $bitbucketClient;
-    private $githubClient;
-    private $doctrine;
-    private $twig;
-
     public function __construct(
-        LoggerInterface $logger,
-        ManagerRegistry $doctrine,
-        Environment $twig,
-        BitbucketClientService $bitbucketClient,
-        GithubClientService $githubClient)
-    {
-        $this->logger = $logger;
-        $this->doctrine = $doctrine;
-        $this->twig = $twig;
-        $this->bitbucketClient = $bitbucketClient;
-        $this->githubClient = $githubClient;
-
+        private LoggerInterface $logger,
+        private ManagerRegistry $doctrine,
+        private NewsRepository $newsDb,
+        private ProjectRepository $projectDb,
+        private Environment $twig,
+        private BitbucketClientService $bitbucketClient,
+        private GithubClientService $githubClient
+    ) {
         parent::__construct();
     }
 
@@ -63,10 +56,9 @@ class UpdateProjectNewsCommand extends Command
         ]);
 
         $output->writeln('Getting stored news...');
-        $news_list = $this->doctrine
-            ->getRepository(News::class)
+        $news_list = $this->newsDb
             ->findAllIndexedByReference();
-        
+
         $entityManager = $this->doctrine
             ->getManager();
 
@@ -76,7 +68,7 @@ class UpdateProjectNewsCommand extends Command
         //$this->updateGithubNews($output, $entityManager, $news_list);
 
         $output->writeln('Process finished.');
-        
+
         return 0;
     }
 
@@ -102,14 +94,12 @@ class UpdateProjectNewsCommand extends Command
     private function updateBitbucketNews(OutputInterface $output, $entityManager, $news_list)
     {
         $auth_token = $this->getBitbucketAuthToken($output);
-        if ($auth_token == null)
-        {
+        if ($auth_token == null) {
             return false;
         }
 
         $output->writeln('Getting stored bitbucket projects...');
-        $projects = $this->doctrine
-            ->getRepository(Project::class)
+        $projects = $this->projectDb
             ->findByProviderIndexedByFullName('bitbucket');
 
         $responses = [];
@@ -140,34 +130,37 @@ class UpdateProjectNewsCommand extends Command
                     } elseif ($chunk->isLast()) {
                         // ... do something with $response
                         $responseArray = $response->toArray();
-    
+
                         $url = $response->getInfo('url');
                         $project = $response_contexts[$url];
                         $projectref = "{$project->getProvider()}:{$project->getFullname()}";
-    
+
                         foreach ($responseArray['values'] as $tagData) {
                             $tagref = "{$projectref};tag:{$tagData['name']}";
-    
+
                             if (!array_key_exists($tagref, $news_list)) {
                                 $news = $this->createBitbucketNews($output, $project, $tagref, $tagData);
                             } else {
                                 $news = $news_list[$tagref];
                             }
-            
+
                             $this->updateBitbucketNewsContent($output, $news, $project, $tagData);
-            
+
                             if (!array_key_exists($tagref, $news_list)) {
                                 $entityManager->persist($news);
                             }
                         }
-            
+
                         $output->writeln("Saving project news for $projectref...");
                         $entityManager->flush();
 
                         if (isset($responseArray['next'])) {
                             $output->writeln('Next page - getting project tags from bitbucket...');
                             $next_responses[] = $this->bitbucketClient->getTagsResponse(
-                                $project->getFullname(), $auth_token, $responseArray['next']);
+                                $project->getFullname(),
+                                $auth_token,
+                                $responseArray['next']
+                            );
                         }
                     } else {
                         // $chunk->getContent() will return a piece
@@ -232,8 +225,7 @@ class UpdateProjectNewsCommand extends Command
     private function updateGithubNews(OutputInterface $output, $entityManager, $news_list)
     {
         $output->writeln('Getting stored github projects...');
-        $projects = $this->doctrine
-            ->getRepository(Project::class)
+        $projects = $this->projectDb
             ->findByProviderIndexedByFullName('github');
 
         $responses = [];
@@ -264,28 +256,28 @@ class UpdateProjectNewsCommand extends Command
                     } elseif ($chunk->isLast()) {
                         // ... do something with $response
                         $responseArray = $response->toArray();
-    
+
                         $url = $response->getInfo('url');
                         $project = $response_contexts[$url];
-                        $projectref = "{$project->getProvider()}:{$project->getFullname()}";                     
+                        $projectref = "{$project->getProvider()}:{$project->getFullname()}";
 
                         foreach ($responseArray as $tagData) {
                             $tagref = "{$projectref};tag:{$tagData['name']}";
-    
+
                             if (!array_key_exists($tagref, $news_list)) {
                                 $news = $this->createGithubNews($output, $project, $tagref, $tagData);
                             } else {
                                 $news = $news_list[$tagref];
                             }
-            
+
                             $this->updateGithubNewsDate($output, $news, $project, $tagData);
                             $this->updateGithubNewsContent($output, $news, $project, $tagData);
-            
+
                             if (!array_key_exists($tagref, $news_list)) {
                                 $entityManager->persist($news);
                             }
                         }
-            
+
                         $output->writeln("Saving project news for $projectref...");
                         $entityManager->flush();
                     } else {
