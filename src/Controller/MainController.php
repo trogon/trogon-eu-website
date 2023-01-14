@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 use Doctrine\Common\Collections\Criteria;
@@ -10,12 +11,10 @@ use App\Repository\NewsRepository;
 
 class MainController extends AbstractController
 {
-    /**
-     * @Route("/", methods={"GET"})
-     */
+    #[Route("/", methods: ["GET"])]
     public function home(
-        NewsRepository $newsDb)
-    {
+        NewsRepository $newsDb
+    ) {
         $itemPerPage = 9;
 
         $criteria = Criteria::create()
