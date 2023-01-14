@@ -40,6 +40,7 @@ Encore
     .addEntry('project', './assets/project.tsx')
     .addEntry('hash-tool', './assets/tools/hash.tsx')
     .addEntry('ip-address-tool', './assets/tools/ip-address.tsx')
+    .addEntry('physics-calculator-tool', './assets/tools/physics-calculator.tsx')
     .addEntry('resistance-tool', './assets/tools/resistance.tsx')
     .addEntry('resolution-tool', './assets/tools/resolution.tsx')
 
@@ -61,7 +62,7 @@ Encore
      * https://symfony.com/doc/current/frontend.html#adding-more-features
      */
     .cleanupOutputBeforeBuild()
-    .enableBuildNotifications()
+    //.enableBuildNotifications()
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
@@ -73,7 +74,7 @@ Encore
     // enables @babel/preset-env polyfills
     .configureBabelPresetEnv((config) => {
         config.useBuiltIns = 'usage';
-        config.corejs = 3;
+        config.corejs = '3.23';
     })
 
     // enables Sass/SCSS support

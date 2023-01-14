@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Controller;
 
 
@@ -16,13 +17,11 @@ class ProjectController extends AbstractController
 {
     private $showPrivate = false;
 
-    /**
-     * @Route("/projects", methods={"GET"})
-     */
+    #[Route("/projects", methods: ["GET"])]
     public function list(
         LayoutService $layout,
-        ProjectRepository $projectDb)
-    {
+        ProjectRepository $projectDb
+    ) {
         $layout->breadcrumbs[] = [
             'label' => 'Projects',
             'route' => 'app_project_list'
@@ -40,14 +39,12 @@ class ProjectController extends AbstractController
         ]);
     }
 
-    /**
-     * @Route("/project/{name}", methods={"GET"})
-     */
+    #[Route("/project/{name}", methods: ["GET"])]
     public function show(
         string $name,
         LayoutService $layout,
-        ProjectRepository $projectDb)
-    {
+        ProjectRepository $projectDb
+    ) {
         // Replace the % decoded symbol to / separator. The name variable is already URL decoded.
         $full_name = str_replace('%', '/', $name);
 

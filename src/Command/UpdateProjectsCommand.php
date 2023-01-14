@@ -1,8 +1,9 @@
 <?php
+
 namespace App\Command;
 
 use Psr\Log\LoggerInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -13,6 +14,8 @@ use Doctrine\Persistence\ManagerRegistry;
 
 use App\Entity\Project;
 
+use App\Repository\ProjectRepository;
+
 use App\Service\BitbucketClientService;
 use App\Service\GithubClientService;
 
@@ -22,22 +25,13 @@ class UpdateProjectsCommand extends Command
     private static $bitbucketDateFormat = 'Y-m-d\TH:i:s.uP';
     private static $ghDateFormat = 'Y-m-d\TH:i:s\Z';
 
-    private $logger;
-    private $bitbucketClient;
-    private $githubClient;
-    private $doctrine;
-
     public function __construct(
-        LoggerInterface $logger,
-        ManagerRegistry $doctrine,
-        BitbucketClientService $bitbucketClient,
-        GithubClientService $githubClient)
-    {
-        $this->logger = $logger;
-        $this->doctrine = $doctrine;
-        $this->bitbucketClient = $bitbucketClient;
-        $this->githubClient = $githubClient;
-
+        private LoggerInterface $logger,
+        private ManagerRegistry $doctrine,
+        private ProjectRepository $projectDb,
+        private BitbucketClientService $bitbucketClient,
+        private GithubClientService $githubClient
+    ) {
         parent::__construct();
     }
 
@@ -57,10 +51,9 @@ class UpdateProjectsCommand extends Command
         ]);
 
         $output->writeln('Getting stored projects...');
-        $projects = $this->doctrine
-            ->getRepository(Project::class)
+        $projects = $this->projectDb
             ->findAllIndexedByFullName();
-        
+
         $entityManager = $this->doctrine
             ->getManager();
 
@@ -95,8 +88,7 @@ class UpdateProjectsCommand extends Command
     private function updateBitbucketProjects(OutputInterface $output, $entityManager, $projects)
     {
         $auth_token = $this->getBitbucketAuthToken($output);
-        if ($auth_token == null)
-        {
+        if ($auth_token == null) {
             return false;
         }
 
@@ -126,10 +118,15 @@ class UpdateProjectsCommand extends Command
                         $output->writeln('Processing projects from bitbucket...');
                         foreach ($responseArray['values'] as $projectData) {
                             $project = $this->createBitbucketProject(
-                                $output, $projectData, $entityManager, $projects
+                                $output,
+                                $projectData,
+                                $entityManager,
+                                $projects
                             );
                             $this->updateBitbucketProject(
-                                $output, $projectData, $project
+                                $output,
+                                $projectData,
+                                $project
                             );
                         }
 
@@ -139,7 +136,10 @@ class UpdateProjectsCommand extends Command
                         if (isset($responseArray['next'])) {
                             $output->writeln('Next page - getting projects from bitbucket...');
                             $next_responses[] = $this->bitbucketClient->getRepositoriesResponse(
-                                'trogon-studios', $auth_token, $responseArray['next']);
+                                'trogon-studios',
+                                $auth_token,
+                                $responseArray['next']
+                            );
                         }
                     } else {
                         // $chunk->getContent() will return a piece
@@ -211,13 +211,18 @@ class UpdateProjectsCommand extends Command
                     // ... do something with $response
                     foreach ($response->toArray() as $projectData) {
                         $project = $this->createGithubProject(
-                            $output, $projectData, $entityManager, $projects
+                            $output,
+                            $projectData,
+                            $entityManager,
+                            $projects
                         );
                         $project = $this->updateGithubProject(
-                            $output, $projectData, $project
+                            $output,
+                            $projectData,
+                            $project
                         );
                     }
-        
+
                     $output->writeln('Saving changed projects from github...');
                     $entityManager->flush();
                 } else {
