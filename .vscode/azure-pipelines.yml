@@ -10,14 +10,14 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  phpVersion: 7.3
+  phpVersion: 8.2
   COMPOSER_CACHE_DIR: $(Pipeline.Workspace)/.composer
   YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
 
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '10.x'
+    versionSpec: '18.x'
   displayName: 'Install Node.js'
 
 - task: Cache@2
@@ -66,6 +66,12 @@ steps:
 - script: composer install --no-interaction --prefer-dist
   displayName: 'composer install --no-dev'
 
+- script: |
+    echo Installing prod .htaccess redirection...
+    rm $(Build.SourcesDirectory)/public/.htaccess
+    mv $(Build.SourcesDirectory)/public/prod/.htaccess $(Build.SourcesDirectory)/public/.htaccess
+  displayName: 'composer dump-env prod'
+
 - task: DownloadSecureFile@1
   name: prodEnvLocal
   displayName: 'Download prod configuration'
@@ -93,6 +99,7 @@ steps:
       translations/**
       vendor/**
       .env.local.php
+      composer.json
       composer.lock
       symfony.lock
       yarn.lock
