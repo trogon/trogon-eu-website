@@ -1,0 +1,25 @@
+import { UnitScale } from "./unit-scale";
+
+export const siScale: UnitScale[] = [
+  { prefix: "yotta", symbol: "Y", factor: 1000000000000000000000000 },
+  { prefix: "zetta", symbol: "Z", factor: 1000000000000000000000 },
+  { prefix: "exa", symbol: "E", factor: 1000000000000000000 },
+  { prefix: "peta", symbol: "P", factor: 1000000000000000 },
+  { prefix: "tera", symbol: "T", factor: 1000000000000 },
+  { prefix: "giga", symbol: "G", factor: 1000000000 },
+  { prefix: "mega", symbol: "M", factor: 1000000 },
+  { prefix: "kilo", symbol: "k", factor: 1000 },
+  { prefix: "hecto", symbol: "h", factor: 100 },
+  { prefix: "deca", symbol: "da", factor: 10 },
+  { prefix: "", symbol: "", factor: 1 },
+  { prefix: "deci", symbol: "d", factor: 0.1 },
+  { prefix: "centi", symbol: "c", factor: 0.01 },
+  { prefix: "mili", symbol: "m", factor: 0.001 },
+  { prefix: "micro", symbol: "u", factor: 0.000001 },
+  { prefix: "nano", symbol: "n", factor: 0.000000001 },
+  { prefix: "pico", symbol: "p", factor: 0.000000000001 },
+  { prefix: "femto", symbol: "f", factor: 0.000000000000001 },
+  { prefix: "atto", symbol: "a", factor: 0.000000000000000001 },
+  { prefix: "zepto", symbol: "z", factor: 0.000000000000000000001 },
+  { prefix: "yocto", symbol: "y", factor: 0.000000000000000000000001 },
+];
