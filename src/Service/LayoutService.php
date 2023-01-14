@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Service;
 
 use Psr\Log\LoggerInterface;
@@ -9,8 +10,9 @@ class LayoutService
     public $mainMenu = [];
     public $socialLinks = [];
 
-    public function __construct(LoggerInterface $logger)
-    {
+    public function __construct(
+        private LoggerInterface $logger
+    ) {
         $this->breadcrumbs[] = [
             'label' => 'Home',
             'route' => 'app_main_home'
