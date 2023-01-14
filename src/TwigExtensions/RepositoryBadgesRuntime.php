@@ -20,13 +20,13 @@ class RepositoryBadgesRuntime implements RuntimeExtensionInterface
         ];
 
         if (!isset($services[$service_name])) {
-            throw new \Exception("Service ${service_name} is not availabe");
+            throw new \Exception("Service {$service_name} is not availabe");
         } else if (!in_array($type, $services[$service_name])) {
-            throw new \Exception("Badge for ${type} is not availabe for service ${service_name}");
+            throw new \Exception("Badge for {$type} is not availabe for service {$service_name}");
         } else {
             $style_text = '';
             foreach ($style as $sitem => $svalue ) {
-                $style_text .= "${sitem}=${svalue}&";
+                $style_text .= "{$sitem}={$svalue}&";
             }
             if (!empty($style_text)) {
                 $style_text = '?' . substr($style_text, 0, -1);
@@ -34,7 +34,7 @@ class RepositoryBadgesRuntime implements RuntimeExtensionInterface
             if (!empty($extra)) {
                 $extra = '/' . $extra;
             }
-            return "https://img.shields.io/${service_name}/${type}/${repo}${extra}${style_text}";
+            return "https://img.shields.io/{$service_name}/{$type}/{$repo}{$extra}{$style_text}";
         }
         
     }

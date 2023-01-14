@@ -2,99 +2,65 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ApiResource(
- *     iri="http://trogon.eu/Project",
- *     collectionOperations={
- *         "get",
- *     },
- *     itemOperations={
- *         "get",
- *     },
- *     order={"name"="ASC"},
- * )
- * @ORM\Entity(repositoryClass="App\Repository\ProjectRepository")
- */
+#[ApiResource(
+    operations: [
+        new Get(),
+        new GetCollection()
+    ],
+)]
+#[ORM\Entity(repositoryClass: "App\Repository\ProjectRepository")]
 class Project
 {
-    /**
-     * @ORM\Id()
-     * @ORM\GeneratedValue()
-     * @ORM\Column(type="integer")
-     */
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: "integer")]
     private $id;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private $provider;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private $name;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private $full_name;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
     private $license;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private $description;
 
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
+    #[ORM\Column(type: "string", length: 255)]
     private $repo_link;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
+    #[ORM\Column(type: "string", length: 255, nullable: true)]
     private $website;
 
-    /**
-     * @ORM\Column(type="string", length=20, nullable=true)
-     */
+    #[ORM\Column(type: "string", length: 20, nullable: true)]
     private $language;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private $is_private;
 
-    /**
-     * @ORM\Column(type="boolean")
-     */
+    #[ORM\Column(type: "boolean")]
     private $is_archived;
 
-    /**
-     * @ORM\Column(type="datetimetz")
-     */
+    #[ORM\Column(type: "datetimetz")]
     private $created_on;
 
-    /**
-     * @ORM\Column(type="datetimetz")
-     */
+    #[ORM\Column(type: "datetimetz")]
     private $updated_on;
 
-    /**
-     * @ApiSubresource
-     * @ORM\OneToMany(targetEntity="App\Entity\News", mappedBy="project")
-     */
+    #[ORM\OneToMany(targetEntity: "App\Entity\News", mappedBy: "project")]
     private $news;
 
     public function __construct()
