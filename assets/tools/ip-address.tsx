@@ -57,6 +57,14 @@ class Ipv4Address {
 
     return this.converter.convertNumberToString(this.ipBytes);
   }
+
+  getBitsStringAddress(): string {
+    if (!this.isValid()) {
+      return "";
+    }
+
+    return this.converter.convertNumberToBitsString(this.ipBytes);
+  }
 }
 
 class Ipv4Network {
@@ -188,6 +196,26 @@ class Ipv4AddressConverter {
     return new Ipv4Address(ipv4Number);
   }
 
+  convertNumberToBitsString(ipv4Number: number): string {
+    let bits = [];
+    let mask = 1;
+
+    if (!Number.isFinite(ipv4Number)) {
+      return "";
+    }
+
+    for (let index = 0; index < 32; index++) {
+      if ((ipv4Number & mask) === mask) {
+        bits[index] = 1;
+      } else {
+        bits[index] = 0;
+      }
+      mask = mask << 1;
+    }
+
+    return bits.reverse().join("");
+  }
+
   convertNumberToString(ipv4Number: number): string {
     const segmentMask = 255;
     let ipAddress: number[] = [];
@@ -213,7 +241,8 @@ class Ipv4AddressConverter {
     const shortestString = segments.reduce((prevValue, currValue) => {
       if (prevValue.length < currValue.length) return prevValue;
       else return currValue;
-    });
+    }, ipv4Address);
+
     if (shortestString.length === 0) {
       console.log("Found zero length segment");
       return [];
@@ -457,6 +486,75 @@ class IpAddressTool extends Component {
             </Col>
           </Row>
         </Form>
+        <hr />
+        <div>
+          <pre>
+            {
+              "Calculate network address from any host address and network mask:\n"
+            }
+            {"    "}
+            {this.state.ipv4Network
+              .getFirstHostAddress()
+              .getBitsStringAddress()}
+            {" <- host address in binary\n"}
+            {"AND "}
+            {this.state.ipv4Network.getNetworkMask().getBitsStringAddress()}
+            {" <- network mask in binary\n"}
+            {" =  "}
+            {this.state.ipv4Network.getNetworkAddress().getBitsStringAddress()}
+            {" <- network address in binary"}
+          </pre>
+          <hr />
+          <pre>
+            {
+              "Calculate broadcast address from network address and network mask:\n"
+            }
+            {"    "}
+            {new Ipv4Address(4294967295).getBitsStringAddress()}
+            {" <- max address in binary\n"}
+            {"XOR "}
+            {this.state.ipv4Network.getNetworkMask().getBitsStringAddress()}
+            {" <- network mask in binary\n"}
+            {"OR  "}
+            {this.state.ipv4Network.getNetworkAddress().getBitsStringAddress()}
+            {" <- network address in binary\n"}
+            {" =  "}
+            {this.state.ipv4Network
+              .getNetworkBroadcast()
+              .getBitsStringAddress()}
+            {" <- broadcast address in binary"}
+          </pre>
+          <hr />
+          <pre>
+            {"Calculate first usable host address from network address:\n"}
+            {"    "}
+            {this.state.ipv4Network.getNetworkAddress().getBitsStringAddress()}
+            {" <- network address in binary\n"}
+            {" +  "}
+            {new Ipv4Address(1).getBitsStringAddress()}
+            {" <- one in binary\n"}
+            {" =  "}
+            {this.state.ipv4Network
+              .getFirstHostAddress()
+              .getBitsStringAddress()}
+            {" <- first usable host address in binary"}
+          </pre>
+          <hr />
+          <pre>
+            {"Calculate last usable host address from broadcast address:\n"}
+            {"    "}
+            {this.state.ipv4Network
+              .getNetworkBroadcast()
+              .getBitsStringAddress()}
+            {" <- broadcast address in binary\n"}
+            {" -  "}
+            {new Ipv4Address(1).getBitsStringAddress()}
+            {" <- one in binary\n"}
+            {" =  "}
+            {this.state.ipv4Network.getLastHostAddress().getBitsStringAddress()}
+            {" <- last usable host address in binary"}
+          </pre>
+        </div>
       </div>
     );
   }
