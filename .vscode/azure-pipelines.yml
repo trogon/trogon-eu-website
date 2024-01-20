@@ -4,7 +4,7 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/php
 
 trigger:
-- master
+- main
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -15,10 +15,14 @@ variables:
   YARN_CACHE_FOLDER: $(Pipeline.Workspace)/.yarn
 
 steps:
-- task: NodeTool@0
+- task: UseNode@1
   inputs:
-    versionSpec: '18.x'
+    version: '20.x'
   displayName: 'Install Node.js'
+
+- script: |
+    corepack enable
+  displayName: 'Enable corepack extension for Node.js'
 
 - task: Cache@2
   inputs:
