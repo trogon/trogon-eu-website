@@ -1,11 +1,12 @@
 pipelines:
   default:
-    - step:
+    - step: &build-assets
         name: Build assets
         image: node:lts
         caches:
           - node
         script:
+          - corepack enable
           - yarn install
           - yarn run encore production
         artifacts:
@@ -26,24 +27,129 @@ pipelines:
           # defining the artifacts to be passed to each future step.
           - reports/*.txt
 
-    - step:
-        name: Deploy to UAT
-        deployment: staging
-        image: composer:2
-        caches:
-          - composer
-        script:
-          - composer install
-          - composer dump-env prod
-          - chmod +x bin/phpunit
-          - bin/phpunit
-# Deploy the files to FTP
-#          - pipe: atlassian/ftp-deploy:0.3.5
-#            variables:
-#              USER: $uat_ftp_user
-#              PASSWORD: $uat_ftp_password
-#              SERVER: $uat_ftp_server
-#              REMOTE_PATH: $uat_remote_path
+
+  custom: # Pipelines that are triggered manually
+    deploy-dev: # The name that is displayed in the list in the Bitbucket Cloud GUI
+      - step: *build-assets
+      - step: &build-release
+          name: Build release
+          image: composer:2
+          caches:
+            - composer
+          script:
+            - composer install
+            - composer dump-env prod
+            - mkdir release
+            - >-
+              cp .env.local.php release/;
+              cp composer.json release/;
+              cp *.lock release/;
+              cp bin/ release/bin/ -r;
+              cp config/ release/config/ -r;
+              cp migrations/ release/migrations/ -r;
+              cp public/ release/public/ -r;
+              cp scripts/ release/scripts/ -r;
+              cp src/ release/src/ -r;
+              cp templates/ release/templates/ -r;
+              cp translations/ release/translations/ -r;
+              cp vendor/ release/vendor/ -r;
+            - mkdir upload
+            - tar -zcvf upload/build_$BITBUCKET_BUILD_NUMBER.tgz release/*
+          artifacts:
+            # defining the artifacts to be passed to each future step.
+            - upload/*
+
+      - step: &ssh-deploy
+          name: Deploy to DEV
+          deployment: test
+          image: atlassian/default-image:4
+          caches:
+            - composer
+          script:
+            # Deploy the files to FTP
+            - pipe: atlassian/ftp-deploy:0.3.7
+              variables:
+                USER: $ftp_username
+                PASSWORD: $ftp_password
+                SERVER: $ftp_server_host
+                REMOTE_PATH: /bitbucket_trogon-website
+                LOCAL_PATH: upload
+            - >-
+              echo 'echo "=== Print environment variables ===";' > deploy.sh;
+              echo 'printenv;' >> deploy.sh;
+              echo 'echo "=== Unzip the release package ===";' >> deploy.sh;
+              echo 'cd upload/$RELEASE_DIR;' >> deploy.sh;
+              echo 'tar -xf $RELEASE_FILE;' >> deploy.sh;
+              echo 'if [ -f "$WEB_DIR/composer.json" ] ' >> deploy.sh;
+              echo 'then' >> deploy.sh;
+              echo '    echo "=== Backup old version ===";' >> deploy.sh;
+              echo '    mkdir $BACKUP_DIR;' >> deploy.sh;
+              echo '    mv $WEB_DIR/* $BACKUP_DIR/;' >> deploy.sh;
+              echo 'fi' >> deploy.sh;
+              echo 'echo "=== Copy new version to target ===";' >> deploy.sh;
+              echo 'mv release/* $WEB_DIR/;' >> deploy.sh;
+              echo 'echo "=== Remove the temp folders ===";' >> deploy.sh;
+              echo 'rm -r release;' >> deploy.sh;
+              echo 'if [ -d $BACKUP_DIR ] ' >> deploy.sh;
+              echo 'then' >> deploy.sh;
+              echo '  rm -r $BACKUP_DIR;' >> deploy.sh;
+              echo 'fi' >> deploy.sh;
+              echo 'echo "=== Clear Symfony cache ===";' >> deploy.sh;
+              echo 'echo "Print diagnostic information";' >> deploy.sh;
+              echo 'printenv;' >> deploy.sh;
+              echo 'echo "Set PHP version for OVH";' >> deploy.sh;
+              echo 'export PATH=/usr/local/php8.2/bin:/usr/local/bin:/usr/bin:/bin:/homez.106/trogoneuup/bin;' >> deploy.sh;
+              echo 'which php;' >> deploy.sh;
+              echo 'php -v;' >> deploy.sh;
+              echo 'echo "Clean symfony cache bin/console cache:clear";' >> deploy.sh;
+              echo 'cd $WEB_DIR;' >> deploy.sh;
+              echo 'chmod +x ./bin/console;' >> deploy.sh;
+              echo './bin/console cache:clear -q;' >> deploy.sh;
+            - pipe: atlassian/ssh-run:0.4.1
+              variables:
+                SSH_USER: $ssh_username
+                SERVER: $ssh_server_host
+                MODE: script
+                COMMAND: deploy.sh
+                ENV_VARS: >-
+                  RELEASE_DIR=bitbucket_trogon-website
+                  RELEASE_FILE=build_$BITBUCKET_BUILD_NUMBER.tgz
+                  BACKUP_DIR=~/upload/backup
+                  WEB_DIR=$site_stage_path
+      - step:
+          <<: *ssh-deploy
+          name: Deploy to UAT
+          deployment: staging
+          trigger: manual
+      - step:
+          <<: *ssh-deploy
+          name: Deploy to PROD
+          deployment: production
+          trigger: manual
+
+    deploy-uat:
+      - step: *build-assets
+      - step: *build-release
+      - step:
+          <<: *ssh-deploy
+          name: Deploy to UAT
+          deployment: staging
+          trigger: manual
+      - step:
+          <<: *ssh-deploy
+          name: Deploy to PROD
+          deployment: production
+          trigger: manual
+
+    deploy-prod:
+      - step: *build-assets
+      - step: *build-release
+      - step:
+          <<: *ssh-deploy
+          name: Deploy to PROD
+          deployment: production
+          trigger: manual
+
 
 definitions:
   services:
