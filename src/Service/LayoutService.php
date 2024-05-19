@@ -49,6 +49,10 @@ class LayoutService
             'route' => 'https://www.github.com/trogon/'
         ];
         $this->socialLinks[] = [
+            'label' => 'DevOps',
+            'route' => 'https://dev.azure.com/trogon-studios/'
+        ];
+        $this->socialLinks[] = [
             'label' => 'Hackster',
             'route' => 'https://www.hackster.io/trogon/'
         ];
