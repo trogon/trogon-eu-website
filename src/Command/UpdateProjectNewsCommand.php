@@ -4,6 +4,7 @@ namespace App\Command;
 
 use Psr\Log\LoggerInterface;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -22,9 +23,9 @@ use App\Repository\ProjectRepository;
 use App\Service\BitbucketClientService;
 use App\Service\GithubClientService;
 
+#[AsCommand(name: 'app:cron:update-project-news', description: 'Updates project data from third-party services.')]
 class UpdateProjectNewsCommand extends Command
 {
-    protected static $defaultName = 'app:cron:update-project-news';
     private static $bitbucketDateFormat = 'Y-m-d\TH:i:sP';
     private static $ghDateFormat = 'Y-m-d\TH:i:s\Z';
 
@@ -40,10 +41,9 @@ class UpdateProjectNewsCommand extends Command
         parent::__construct();
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this
-            ->setDescription('Updates project data from third-party services.')
             ->setHelp('This command updates project data stored in local database from third-party services eg. github, bitbucket etc.');
     }
 
