@@ -38,23 +38,28 @@ pipelines:
             - composer
           script:
             - composer install
+            - >-
+              echo 'APP_SECRET=${ovh_app_secret:-ovh_app_secret-NotFount}' >> '.env.prod.local';
+              echo 'DATABASE_URL=${ovh_database_url:-ovh_database_url-NotFount}' >> '.env.prod.local';
+              echo 'BITBUCKET_BUILD=${BITBUCKET_BUILD_NUMBER:-BITBUCKET_BUILD_NUMBER-NotFount}' >> '.env.prod.local';
+              echo 'WEBSITE_VERSION=${WEBSITE_VERSION:-WEBSITE_VERSION-NotFount}-b${BITBUCKET_BUILD}' >> '.env.prod.local';
             - composer dump-env prod
             - mkdir release
             - >-
-              cp .env.local.php release/;
-              cp composer.json release/;
-              cp *.lock release/;
-              cp bin/ release/bin/ -r;
-              cp config/ release/config/ -r;
-              cp migrations/ release/migrations/ -r;
-              cp public/ release/public/ -r;
-              cp scripts/ release/scripts/ -r;
-              cp src/ release/src/ -r;
-              cp templates/ release/templates/ -r;
-              cp translations/ release/translations/ -r;
-              cp vendor/ release/vendor/ -r;
+              cp -v .env*.php release/;
+              cp -v composer.json release/;
+              cp -v *.lock release/;
+              cp -vr bin/ release/bin/;
+              cp -vr config/ release/config/;
+              cp -vr migrations/ release/migrations/;
+              cp -vr public/ release/public/;
+              cp -vr scripts/ release/scripts/;
+              cp -vr src/ release/src/;
+              cp -vr templates/ release/templates/;
+              cp -vr translations/ release/translations/;
+              cp -r vendor/ release/vendor/;
             - mkdir upload
-            - tar -zcvf upload/build_$BITBUCKET_BUILD_NUMBER.tgz release/*
+            - tar -zcvf upload/build_$BITBUCKET_BUILD_NUMBER.tgz release/
           artifacts:
             # defining the artifacts to be passed to each future step.
             - upload/*
@@ -84,10 +89,12 @@ pipelines:
               echo 'then' >> deploy.sh;
               echo '    echo "=== Backup old version ===";' >> deploy.sh;
               echo '    mkdir $BACKUP_DIR;' >> deploy.sh;
-              echo '    mv $WEB_DIR/* $BACKUP_DIR/;' >> deploy.sh;
+              echo '    mv -v $WEB_DIR/* $BACKUP_DIR/;' >> deploy.sh;
+              echo '    mv -v $WEB_DIR/.env* $BACKUP_DIR/;' >> deploy.sh;
               echo 'fi' >> deploy.sh;
               echo 'echo "=== Copy new version to target ===";' >> deploy.sh;
-              echo 'mv release/* $WEB_DIR/;' >> deploy.sh;
+              echo 'mv -v release/* $WEB_DIR/;' >> deploy.sh;
+              echo 'mv -v release/.env* $WEB_DIR/;' >> deploy.sh;
               echo 'echo "=== Remove the temp folders ===";' >> deploy.sh;
               echo 'rm -r release;' >> deploy.sh;
               echo 'if [ -d $BACKUP_DIR ] ' >> deploy.sh;
