@@ -43,6 +43,8 @@ pipelines:
               echo 'DATABASE_URL=${ovh_database_url:-ovh_database_url-NotFount}' >> '.env.prod.local';
               echo 'BITBUCKET_BUILD=${BITBUCKET_BUILD_NUMBER:-BITBUCKET_BUILD_NUMBER-NotFount}' >> '.env.prod.local';
               echo 'WEBSITE_VERSION=${WEBSITE_VERSION:-WEBSITE_VERSION-NotFount}-b${BITBUCKET_BUILD}' >> '.env.prod.local';
+              echo 'HTTP_CLIENT_API_AUTH_BASIC_GITHUB=${GITHUB_API_CLIENT_AUTH_BASIC:-GITHUB_API_CLIENT_AUTH_BASIC-NotFount}' >> '.env.prod.local';
+              echo 'HTTP_CLIENT_OAUTH_AUTH_BASIC_BITBUCKET=${BITBUCKET_OAUTH_CLIENT_AUTH_BASIC:-BITBUCKET_OAUTH_CLIENT_AUTH_BASIC-NotFount}' >> '.env.prod.local';
             - composer dump-env prod
             - mkdir release
             - >-
