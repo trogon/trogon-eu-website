@@ -1,11 +1,17 @@
-version: '3'
-
 services:
 ###> doctrine/doctrine-bundle ###
-  database:
+  database-pgsql:
     ports:
       - "5432"
+
+  database-mysql:
+    ports:
+      - "3306"
 ###< doctrine/doctrine-bundle ###
+
+  webserver:
+    ports:
+      - "81:80"
 
 ###> symfony/mailer ###
   mailer:
