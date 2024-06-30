@@ -17,12 +17,13 @@ framework:
                 verify_peer: false
             bitbucket_oauth.client:
                 base_uri: https://bitbucket.org/site/oauth2/
-                auth_basic: 'mxnvmeayDbKeqcBcRM:a6FCepBfAtV6WDDCtvcsCDp4vmYAqdYj'
+                # credentials secured 30/06/2024, pipeline deploy credentials.
+                auth_basic: '%env(HTTP_CLIENT_OAUTH_AUTH_BASIC_BITBUCKET)%'
                 verify_peer: false
             github_api.client:
                 base_uri: https://api.github.com/
-                # this mean if authentication will be removed in 2021
-                auth_basic: 'a6de26f9bd5efaa78116:713486ebf104bbb997a4cb9b861bf534b7f403ea'
+                # credentials secured 30/06/2024, pipeline deploy credentials.
+                auth_basic: '%env(HTTP_CLIENT_API_AUTH_BASIC_GITHUB)%'
                 verify_peer: false
             github_oauth.client:
                 base_uri: https://github.com/login/oauth/
