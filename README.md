@@ -68,6 +68,7 @@ Produce encode JS output
 ```bash
 # Script command
 yarn build
+
 # Full command
 yarn run encore production
 
